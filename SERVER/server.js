@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const recipesRoutes = require("./src/routes/recipes-routes");
-const usersRoutes = require("./src/routes/users-routes");
-const HttpError = require("./src/models/http-error");
+const recipesRoutes = require("./src/routes/recipesRoutes");
+const usersRoutes = require("./src/routes/usersRoutes");
+const HttpError = require("./src/models/httpError");
 
 const app = express();
 
@@ -28,4 +30,12 @@ app.use((error, req, res, next) => {
     .json({ message: error.message || "Sorry, an error ocurred!" });
 });
 
-app.listen(5000);
+mongoose
+  .connect(process.env.CONNECTION_STRING)
+  .then((res) => {
+    // start the BE server
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
