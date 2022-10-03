@@ -3,6 +3,14 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FC, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { SchemaOf } from "yup";
+import { getSubmitButtonLabel } from "../../../services/AuthService";
+import { AxiosError } from "axios";
+import { useDispatch } from "react-redux";
+import { NotificationActions } from "../../../redux/reducers/notificationReducer";
+import { NotificationTypes } from "../../../models/NotificationModel";
+import { useRouter } from "next/router";
+import { OVERVIEW_PAGE_ROUTE } from "../../../constants/routes";
+import useAxiosRequest from "../../../services/AxiosService";
 
 type FormProperties = {
   email: string;
@@ -10,6 +18,10 @@ type FormProperties = {
 };
 
 const LoginForm: FC<any> = () => {
+  const router = useRouter();
+  const { axiosRequest } = useAxiosRequest();
+  const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const formProperties: FormProperties = {
@@ -27,11 +39,51 @@ const LoginForm: FC<any> = () => {
   };
 
   const handleEmailAndPasswordLogin = (
-    email: string,
-    password: string,
+    values: FormProperties,
     setSubmitting: (state: boolean) => void
   ) => {
-    setSubmitting(false);
+    const { email, password } = values;
+
+    const data = {
+      email,
+      password,
+    };
+
+    const successAction = () => {
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: "Logged in successfully! You will now be redirected",
+          type: NotificationTypes.Success,
+        })
+      );
+
+      router.push(OVERVIEW_PAGE_ROUTE);
+    };
+
+    const errorAction = (err: AxiosError) => {
+      console.log(err);
+      const { message } = err.response?.data as { message: string };
+
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: message || "There was a problem logging you in.",
+          type: NotificationTypes.Error,
+        })
+      );
+    };
+
+    const finallyAction = () => {
+      setSubmitting(false);
+    };
+
+    axiosRequest(
+      "post",
+      "http://localhost:5000/api/users/login",
+      data,
+      successAction,
+      errorAction,
+      finallyAction
+    );
   };
 
   const errorMessageClassName = "text-sm text-red-400 font-medium";
@@ -47,9 +99,7 @@ const LoginForm: FC<any> = () => {
       initialValues={formProperties}
       validationSchema={LoginSchema}
       onSubmit={(values, { setSubmitting }) => {
-        const { email, password } = values;
-
-        handleEmailAndPasswordLogin(email, password, setSubmitting);
+        handleEmailAndPasswordLogin(values, setSubmitting);
       }}
     >
       {({ isSubmitting }) => (
@@ -102,7 +152,7 @@ const LoginForm: FC<any> = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            LOGIN
+            {getSubmitButtonLabel(isSubmitting, "LOGGING IN..", "LOGIN")}
           </button>
         </Form>
       )}

@@ -3,6 +3,12 @@ import { FC, useState } from "react";
 import * as Yup from "yup";
 import { SchemaOf } from "yup";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { AxiosError } from "axios";
+import { NotificationActions } from "../../../redux/reducers/notificationReducer";
+import { NotificationTypes } from "../../../models/NotificationModel";
+import { useDispatch } from "react-redux";
+import { getSubmitButtonLabel } from "../../../services/AuthService";
+import useAxiosRequest from "../../../services/AxiosService";
 
 type FormProperties = {
   username: string;
@@ -12,6 +18,8 @@ type FormProperties = {
 };
 
 const RegisterForm: FC<any> = () => {
+  const dispatch = useDispatch();
+  const { axiosRequest } = useAxiosRequest();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const formProperties: FormProperties = {
@@ -44,6 +52,50 @@ const RegisterForm: FC<any> = () => {
     setShowPassword((prev) => !prev);
   };
 
+  const signupUser = (
+    values: FormProperties,
+    setSubmitting: (isSubmitting: boolean) => void
+  ) => {
+    const { email, password, username } = values;
+    const data = {
+      username,
+      email,
+      password,
+    };
+
+    const successAction = () => {
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: "Account created successfuly! You can now login.",
+          type: NotificationTypes.Success,
+        })
+      );
+    };
+
+    const errorAction = (err: AxiosError) => {
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: "There was a problem creating your account!",
+          type: NotificationTypes.Error,
+        })
+      );
+      console.log(err);
+    };
+
+    const finallyAction = () => {
+      setSubmitting(false);
+    };
+
+    axiosRequest(
+      "post",
+      "http://localhost:5000/api/users/register",
+      data,
+      successAction,
+      errorAction,
+      finallyAction
+    );
+  };
+
   const errorMessageClassName = "text-sm text-red-400 font-medium";
   const fieldWrapperClassName = "w-full my-6";
   const fieldClassName =
@@ -57,7 +109,7 @@ const RegisterForm: FC<any> = () => {
       initialValues={formProperties}
       validationSchema={SignupSchema}
       onSubmit={(values, { setSubmitting }) => {
-        const { email, password, username } = values;
+        signupUser(values, setSubmitting);
       }}
     >
       {({ isSubmitting }) => (
@@ -139,7 +191,7 @@ const RegisterForm: FC<any> = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            REGISTER
+            {getSubmitButtonLabel(isSubmitting, "REGISTER..", "REGISTER")}
           </button>
         </Form>
       )}

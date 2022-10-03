@@ -13,7 +13,7 @@ const initialState: NotificationState = {
     content: '',
     type: null,
     isOpened: false,
-    life: 5000
+    life: 3000
 }
 
 export const notificationReducer: Reducer<NotificationState, NotificationAction> = (state = initialState, action: NotificationAction) => {
@@ -31,7 +31,7 @@ export const notificationReducer: Reducer<NotificationState, NotificationAction>
                 content: '',
                 type: null,
                 isOpened: false,
-                life: 5000
+                life: 3000
             };
         default:
             return state;

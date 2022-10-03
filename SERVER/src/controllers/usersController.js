@@ -8,7 +8,7 @@ const register = async (req, res, next) => {
     return next(new HttpError("Invalid input data"), 422);
   }
 
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   let existingUser;
   try {
@@ -26,7 +26,7 @@ const register = async (req, res, next) => {
 
   const createdUser = new User({
     email,
-    name,
+    username,
     password,
     recipes: [],
     registeredOn: new Date(),
