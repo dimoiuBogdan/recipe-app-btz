@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const User = require("../models/userModel");
 const HttpError = require("../models/httpError");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res, next) => {
   const errors = validationResult(req);
@@ -52,8 +53,16 @@ const register = async (req, res, next) => {
     return next(new HttpError("Registering failed, please try again"), 500);
   }
 
+  const token = jwt.sign(
+    { userId: createdUser.id, email: createdUser.email },
+    process.env.JWT_SECRET_STRING,
+    { expiresIn: "1h" }
+  );
+
   res.status(201).json({
-    createdUser,
+    user: createdUser,
+    email: createdUser.email,
+    token,
   });
 };
 
@@ -71,13 +80,37 @@ const login = async (req, res, next) => {
     );
   }
 
-  if (!existingUser || existingUser.password !== password) {
+  if (!existingUser) {
     return next(
       new HttpError("Invalid credentials. Could not log you in", 401)
     );
   }
 
-  res.json({ message: "Logged in" });
+  let isValidPassword = false;
+  try {
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+  } catch (error) {
+    return next(
+      new HttpError(
+        "Could not check your credentials. Please try again later",
+        500
+      )
+    );
+  }
+
+  if (!isValidPassword) {
+    return next(
+      new HttpError("Invalid credentials. Could not log you in", 401)
+    );
+  }
+
+  const token = jwt.sign(
+    { userId: existingUser.id, email: existingUser.email },
+    process.env.JWT_SECRET_STRING,
+    { expiresIn: "1h" }
+  );
+
+  res.json({ message: "Logged in", useId: existingUser.id, token });
 };
 
 const getUsers = async (req, res, next) => {
