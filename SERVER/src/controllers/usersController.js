@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const User = require("../models/userModel");
 const HttpError = require("../models/httpError");
+const bcrypt = require("bcryptjs");
 
 const register = async (req, res, next) => {
   const errors = validationResult(req);
@@ -24,10 +25,22 @@ const register = async (req, res, next) => {
     return next(new HttpError("Email already used"), 422);
   }
 
+  const HASH_PASSWORD_STRENGTH = 12;
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, HASH_PASSWORD_STRENGTH);
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError("Could not create account, try again later."),
+      500
+    );
+  }
+
   const createdUser = new User({
     email,
     username,
-    password,
+    password: hashedPassword,
     recipes: [],
     registeredOn: new Date(),
   });
