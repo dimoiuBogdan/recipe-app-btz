@@ -3,17 +3,21 @@ const recipesController = require("../controllers/recipesController");
 const {
   createRecipeValidation,
 } = require("../routeValidations/recipesRoutesValidation");
+const checkAuth = require("../middlewares/checkAuth");
 
 const router = express.Router();
 
 router.get("/", recipesController.getAllRecipes);
 
-router.post("/", createRecipeValidation, recipesController.createRecipe);
-
 router.get("/user/:uid", recipesController.getRecipesByUserId);
 
-// always place these routes to the end so that others don't get treated as an id
 router.get("/:rid", recipesController.getRecipeById);
+
+router.use(checkAuth);
+
+router.post("/", createRecipeValidation, recipesController.createRecipe);
+
+// always place these routes to the end so that others don't get treated as an id
 
 router.patch("/:rid", recipesController.editRecipe);
 

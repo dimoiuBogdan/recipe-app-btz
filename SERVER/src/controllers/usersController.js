@@ -110,7 +110,7 @@ const login = async (req, res, next) => {
     { expiresIn: "1h" }
   );
 
-  res.json({ message: "Logged in", useId: existingUser.id, token });
+  res.json({ message: "Logged in", userId: existingUser.id, token });
 };
 
 const getUsers = async (req, res, next) => {

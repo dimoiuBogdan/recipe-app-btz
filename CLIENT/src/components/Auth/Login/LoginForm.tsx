@@ -4,13 +4,14 @@ import { FC, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { SchemaOf } from "yup";
 import { getSubmitButtonLabel } from "../../../services/AuthService";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useDispatch } from "react-redux";
 import { NotificationActions } from "../../../redux/reducers/notificationReducer";
 import { NotificationTypes } from "../../../models/NotificationModel";
 import { useRouter } from "next/router";
 import { OVERVIEW_PAGE_ROUTE } from "../../../constants/routes";
-import useAxiosRequest from "../../../services/AxiosService";
+import useAxiosRequest from "../../../hooks/useAxiosRequest";
+import { AuthActions } from "../../../redux/reducers/authReducer";
 
 type FormProperties = {
   email: string;
@@ -49,7 +50,16 @@ const LoginForm: FC<any> = () => {
       password,
     };
 
-    const successAction = () => {
+    const successAction = (res: AxiosResponse) => {
+      const { userId, token } = res.data as { userId: string; token: string };
+
+      dispatch(
+        AuthActions.setAuthProperties({
+          token,
+          userId,
+        })
+      );
+
       dispatch(
         NotificationActions.setPopupProperties({
           content: "Logged in successfully! You will now be redirected",

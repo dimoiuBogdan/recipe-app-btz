@@ -1,12 +1,16 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthState } from "../models/AuthModel";
 import { NotificationTypes } from "../models/NotificationModel";
 import { NotificationActions } from "../redux/reducers/notificationReducer";
+import { RootState } from "../redux/reducers/reducers";
 
 const useAxiosRequest = () => {
     const dispatch = useDispatch();
     const activeHttpRequests = useRef<AbortController[]>([]);
+
+    const { token } = useSelector<RootState, AuthState>(s => s.authReducer)
 
     useEffect(() => {
         return () => {
@@ -36,6 +40,7 @@ const useAxiosRequest = () => {
             method,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             url,
             data: JSON.stringify(data),

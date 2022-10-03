@@ -8,7 +8,7 @@ import { NotificationActions } from "../../../redux/reducers/notificationReducer
 import { NotificationTypes } from "../../../models/NotificationModel";
 import { useDispatch } from "react-redux";
 import { getSubmitButtonLabel } from "../../../services/AuthService";
-import useAxiosRequest from "../../../services/AxiosService";
+import useAxiosRequest from "../../../hooks/useAxiosRequest";
 
 type FormProperties = {
   username: string;
