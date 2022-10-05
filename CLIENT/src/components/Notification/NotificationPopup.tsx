@@ -22,7 +22,7 @@ const NotificationPopup: FC<any> = () => {
 
       if (type === NotificationTypes.Success) return "bg-green-200";
 
-      if (type === NotificationTypes.Warning) return "bg-yellow-300";
+      if (type === NotificationTypes.Warning) return "bg-orange-300";
     }
 
     return "bg-white";

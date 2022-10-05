@@ -67,7 +67,7 @@ const RecipesCarousel = () => {
       const { duration, id, likes, title, image, creator } = recipe;
 
       return (
-        <SwiperSlide className="cursor-pointer" key={recipe.id}>
+        <SwiperSlide key={recipe.id}>
           <TopRatedRecipeCard
             id={id}
             likes={likes}

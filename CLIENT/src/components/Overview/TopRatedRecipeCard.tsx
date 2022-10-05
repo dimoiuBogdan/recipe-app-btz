@@ -17,15 +17,12 @@ const TopRatedRecipeCard: FC<TopRatedRecipe> = ({
 
   return (
     <div
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5)), url(${image})`,
+      }}
       onClick={redirectToRecipe}
-      className="w-full relative rounded-md shadow-md bg-center bg-cover h-80 overflow-hidden text-white p-2 flex flex-col justify-end"
+      className="w-full bg-cover bg-center relative rounded-md shadow-md h-80 overflow-hidden text-white p-2 flex flex-col justify-end"
     >
-      <Image
-        alt="top_rated_recipe_image"
-        src={image}
-        layout="fill"
-        className="object-cover object-center z-0 brightness-75"
-      />
       <div className="z-10">
         <div className="font-medium text-lg">{title}</div>
         <div className="flex items-center text-zinc-100 text-sm font-medium">

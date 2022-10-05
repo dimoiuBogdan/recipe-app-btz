@@ -6,10 +6,10 @@ type AuthModalProps = {
   children: any;
 };
 const AuthModal: FC<AuthModalProps> = ({ children }) => {
-  const activeLinkClassName = "text-purple-600";
+  const activeLinkClassName = "text-orange-600";
 
   return (
-    <div className="max-w-xl bg-purple-100 bg-opacity-30 w-full py-8 shadow-lg rounded-md">
+    <div className="max-w-xl bg-orange-100 bg-opacity-30 w-full py-8 shadow-lg rounded-md">
       <div className="text-center text-2xl font-bold mb-4 flex items-center justify-center text-zinc-300">
         <ActiveLink className={activeLinkClassName} href={AUTH.REGISTER_PATH}>
           REGISTER
