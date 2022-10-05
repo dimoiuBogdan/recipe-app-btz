@@ -54,7 +54,7 @@ const NotificationPopup: FC<any> = () => {
 
   const notificationPopupClassName = `${getNotificationBackground()} text-black fixed py-2 px-4 right-[10vw] top-12 z-50 rounded-lg shadow-lg min-w-[250px]`;
   const closePopupClassName =
-    "text-2xl font-bold text-slate-900 cursor-pointer hover:scale-110";
+    "text-2xl font-bold text-zinc-900 cursor-pointer hover:scale-110";
   const contentClassName = "max-w-xs";
 
   return (

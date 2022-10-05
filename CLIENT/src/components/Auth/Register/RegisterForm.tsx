@@ -187,7 +187,7 @@ const RegisterForm: FC<any> = () => {
             />
           </div>
           <button
-            className="my-4 text-white text-lg font-medium w-full bg-gradient-to-r from-btz-teal to-purple-500 rounded-full py-1.5 shadow-sm hover:shadow-md disabled:opacity-40"
+            className="my-4 text-white text-lg font-medium w-full bg-gradient-to-r from-purple-300 to-purple-600 rounded-full py-1.5 shadow-sm hover:shadow-md disabled:opacity-40"
             type="submit"
             disabled={isSubmitting}
           >

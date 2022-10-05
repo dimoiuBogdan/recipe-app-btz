@@ -21,10 +21,10 @@ a {
   @apply transition
 }
 
-::-moz-selection {
-  @apply bg-btz-blue text-white
+*:focus {
+  @apply outline-none shadow-md
 }
 
-::selection {
-  @apply bg-btz-blue text-white
+.center {
+  @apply top-1/2 transform -translate-y-1/2 -translate-x-1/2
 }

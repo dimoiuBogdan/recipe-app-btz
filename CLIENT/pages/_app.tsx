@@ -6,8 +6,8 @@ import store from "../src/redux/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="bg-btz-blue bg-opacity-70">
-      <div className="mx-auto max-w-screen-lg min-h-screen h-full shadow-lg">
+    <div className="bg-purple-100 bg-opacity-30">
+      <div className="mx-auto max-w-screen-md min-h-screen h-full shadow-lg p-4">
         <Provider store={store}>
           <NotificationPopup />
           <Component {...pageProps} />
