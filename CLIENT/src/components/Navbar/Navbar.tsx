@@ -30,7 +30,7 @@ const Navbar: FC<any> = () => {
   };
 
   return (
-    <div className="fixed bottom-0 flex items-center justify-evenly text-2xl py-3 shadow-inner rounded-md max-w-[400px] px-3 w-full left-1/2 transform -translate-x-1/2 bg-orange-50">
+    <div className="fixed z-50 bottom-0 flex items-center justify-evenly text-2xl py-3 shadow-inner rounded-md max-w-[400px] px-3 w-full left-1/2 transform -translate-x-1/2 bg-orange-50">
       {getNavbarContent()}
     </div>
   );
@@ -53,7 +53,7 @@ const NavbarElement: FC<NavbarElementProps> = ({ icon, page, href }) => {
   };
 
   const elementClassNames = linkIsActive()
-    ? "text-orange-700 bg-orange-200 rounded-lg shadow-sm"
+    ? "text-orange-500 bg-orange-200 rounded-lg shadow-sm"
     : "text-zinc-700";
 
   return (

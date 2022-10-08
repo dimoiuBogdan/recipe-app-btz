@@ -20,14 +20,14 @@ const SearchBar = () => {
         className="shadow-sm border-2 pl-11 border-orange-200 text-lg p-1 rounded-md w-full bg-transparent placeholder:text-zinc-500 placeholder:font-normal font-medium"
         placeholder="Protein Pancakes"
       />
-      <FaSearch className="text-xl text-zinc absolute center left-6 text-orange-600" />
+      <FaSearch className="text-xl text-zinc absolute center left-6 text-orange-400" />
     </div>
   );
 };
 
 const FilterButton = () => {
   return (
-    <div className="bg-orange-200 text-2xl flex items-center justify-center rounded-md flex-1 shadow-sm text-orange-600 hover:shadow-md cursor-pointer">
+    <div className="bg-orange-200 text-2xl flex items-center justify-center rounded-md flex-1 shadow-sm text-orange-400 hover:shadow-md cursor-pointer">
       <FaFilter />
     </div>
   );
