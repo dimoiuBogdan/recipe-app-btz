@@ -53,6 +53,8 @@ const LoginForm: FC<any> = () => {
     const successAction = (res: AxiosResponse) => {
       const { userId, token } = res.data as { userId: string; token: string };
 
+      console.log(res);
+
       dispatch(
         AuthActions.setAuthProperties({
           token,

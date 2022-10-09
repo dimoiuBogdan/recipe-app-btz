@@ -47,6 +47,13 @@ export type RecipeDetailsStepsModel = {
     description: string;
 }
 
+export type NewRecipeModel = {
+    creator: string;
+    recipeName: string;
+    ingredients: RecipeDetailsIngredientsModel[];
+    image: string;
+}
+
 export enum RecipeFilterTypes {
     Snack = "snack",
     Lunch = "lunch",
