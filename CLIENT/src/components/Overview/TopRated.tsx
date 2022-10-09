@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import React from "react";
-import { TopRatedRecipe } from "../../models/RecipeModels";
+import { TopRatedRecipeModel } from "../../models/RecipeModels";
 import TopRatedRecipeCard from "./TopRatedRecipeCard";
 
 const TopRated = () => {
@@ -14,7 +14,7 @@ const TopRated = () => {
 };
 
 const RecipesCarousel = () => {
-  const topRatedRecipes: TopRatedRecipe[] = [
+  const topRatedRecipes: TopRatedRecipeModel[] = [
     {
       id: "dummy-id-1",
       duration: "20 min",

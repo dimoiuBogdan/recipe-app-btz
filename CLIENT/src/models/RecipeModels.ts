@@ -1,4 +1,4 @@
-export type TopRatedRecipe = {
+export type TopRatedRecipeModel = {
     id: string;
     likes: number;
     title: string;
@@ -8,7 +8,7 @@ export type TopRatedRecipe = {
 }
 
 
-export type AllRecipe = {
+export type AllRecipeModel = {
     id: string;
     image: string;
     title: string;
@@ -17,11 +17,35 @@ export type AllRecipe = {
     type: RecipeFilterTypes;
 }
 
-export type RecipeFilters = {
+export type RecipeFiltersModel = {
     content: string;
     filterId: RecipeFilterTypes;
 }
 
+export type RecipeDetailsModel = {
+    id: string;
+    image: string;
+    title: string;
+    description: string;
+    nutrients: RecipeDetailsNutrientsModel[];
+    ingredients: RecipeDetailsIngredientsModel[];
+    steps: RecipeDetailsStepsModel[];
+    duration: string;
+}
+
+export type RecipeDetailsIngredientsModel = {
+    title: string;
+    quantity: string;
+}
+
+export type RecipeDetailsNutrientsModel = {
+    title: string;
+    quantity: string;
+}
+
+export type RecipeDetailsStepsModel = {
+    description: string;
+}
 
 export enum RecipeFilterTypes {
     Snack = "snack",

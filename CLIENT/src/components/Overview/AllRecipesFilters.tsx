@@ -5,12 +5,15 @@ import React, {
   SetStateAction,
   useEffect,
 } from "react";
-import { RecipeFilters, RecipeFilterTypes } from "../../models/RecipeModels";
+import {
+  RecipeFiltersModel,
+  RecipeFilterTypes,
+} from "../../models/RecipeModels";
 
 const AllRecipesFilters = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
-  const recipesFilters: RecipeFilters[] = [
+  const recipesFilters: RecipeFiltersModel[] = [
     {
       content: "Breakfast🍳",
       filterId: RecipeFilterTypes.Breakfast,

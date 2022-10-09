@@ -1,11 +1,13 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { FC } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { ImSpoonKnife } from "react-icons/im";
-import { AllRecipe, RecipeFilterTypes } from "../../models/RecipeModels";
+import { RECIPE_DETAILS_ROUTE } from "../../constants/routes";
+import { AllRecipeModel, RecipeFilterTypes } from "../../models/RecipeModels";
 
 const AllRecipesCards: FC<any> = () => {
-  const allRecipes: AllRecipe[] = [
+  const allRecipes: AllRecipeModel[] = [
     {
       id: "r-1",
       creator: "Dimoiu Bogdan",
@@ -58,7 +60,7 @@ const AllRecipesCards: FC<any> = () => {
 
 export default AllRecipesCards;
 
-const AllRecipeCard: FC<AllRecipe> = ({
+const AllRecipeCard: FC<AllRecipeModel> = ({
   id,
   type,
   image,
@@ -66,8 +68,17 @@ const AllRecipeCard: FC<AllRecipe> = ({
   creator,
   duration,
 }) => {
+  const router = useRouter();
+
+  const redirectToRecipeDetails = () => {
+    router.push({
+      pathname: "/recipes/[recipeId]",
+      query: { recipeId: id },
+    });
+  };
+
   return (
-    <div className="w-1/2 p-2">
+    <div onClick={redirectToRecipeDetails} className="w-1/2 p-2">
       <div className="bg-orange-200 bg-opacity-70 shadow-sm rounded-md p-3 cursor-pointer hover:shadow-lg text-zinc-500">
         <div className="flex">
           <Image
