@@ -65,10 +65,10 @@ const createRecipe = async (req, res, next) => {
     return next(new HttpError("Invalid inputs passed"), 422);
   }
 
-  const { creator, title, ingredients } = req.body;
+  const { creator, recipeName, ingredients } = req.body;
 
   const createdRecipe = new Recipe({
-    title,
+    recipeName,
     creator,
     image:
       "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=d7638e42568715f8834e529944691ecaffa6bb9c31fffc305488e61455a4d015&ipo=images",

@@ -50,10 +50,8 @@ const useAxiosRequest = () => {
                 successAction(res);
             })
             .catch((err: AxiosError) => {
-                const { message } = err.response?.data as { message: string, args: any }
-
                 dispatch(NotificationActions.setPopupProperties({
-                    content: message || "Sorry, something went wrong",
+                    content: "Sorry, something went wrong",
                     type: NotificationTypes.Error
                 }))
                 errorAction(err);

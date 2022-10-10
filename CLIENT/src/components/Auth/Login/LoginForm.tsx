@@ -74,11 +74,10 @@ const LoginForm: FC<any> = () => {
 
     const errorAction = (err: AxiosError) => {
       console.log(err);
-      const { message } = err.response?.data as { message: string };
 
       dispatch(
         NotificationActions.setPopupProperties({
-          content: message || "There was a problem logging you in.",
+          content: "There was a problem logging you in.",
           type: NotificationTypes.Error,
         })
       );

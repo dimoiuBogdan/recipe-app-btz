@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ingredientsSubSchema = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
@@ -19,7 +19,7 @@ const recipeSchema = new Schema({
     ref: "User",
     required: true,
   },
-  title: {
+  recipeName: {
     type: String,
     required: true,
   },
