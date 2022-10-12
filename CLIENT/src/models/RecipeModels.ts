@@ -48,10 +48,12 @@ export type RecipeDetailsStepsModel = {
 }
 
 export type NewRecipeModel = {
-    creator: string;
+    creator: string | undefined;
     recipeName: string;
     ingredients: RecipeDetailsIngredientsModel[];
     image: string;
+    type: RecipeFilterTypes | undefined;
+    duration: number | undefined;
 }
 
 export enum RecipeFilterTypes {
