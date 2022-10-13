@@ -34,6 +34,7 @@ export type RecipeDetailsModel = {
 }
 
 export type RecipeDetailsIngredientsModel = {
+    id: string;
     title: string;
     quantity: string;
 }

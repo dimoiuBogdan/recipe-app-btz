@@ -14,20 +14,12 @@ import { NotificationActions } from "../src/redux/reducers/notificationReducer";
 import { NotificationTypes } from "../src/models/NotificationModel";
 import { getSubmitButtonLabel } from "../src/services/AuthService";
 import { RootState } from "../src/redux/reducers/reducers";
-import { FaPlusSquare } from "react-icons/fa";
+import Ingredients from "../src/components/NewRecipe/Ingredients";
+import { v4 } from "uuid";
 
 const NewRecipePage: NextPage = () => {
   const dispatch = useDispatch();
   const { axiosRequest } = useAxiosRequest();
-
-  const [ingredientFields, setIngredientFields] = useState<
-    RecipeDetailsIngredientsModel[]
-  >([
-    {
-      title: "",
-      quantity: "",
-    },
-  ]);
 
   const userId = useSelector<RootState, string>((s) => s.authReducer.userId);
 
@@ -35,7 +27,7 @@ const NewRecipePage: NextPage = () => {
     creator: userId || undefined,
     image:
       "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=09f17a6d679b013e15f0980f59ed1b295961ccd59bd9bcd7ac0b14dd11590f4a&ipo=images",
-    ingredients: ingredientFields,
+    ingredients: [{ id: v4(), quantity: "", title: "" }],
     recipeName: "",
     duration: undefined,
     type: undefined,
@@ -43,6 +35,7 @@ const NewRecipePage: NextPage = () => {
 
   const IngredientsSchema: Yup.SchemaOf<RecipeDetailsIngredientsModel> =
     Yup.object().shape({
+      id: Yup.string().required("Required"),
       quantity: Yup.string().required("Required"),
       title: Yup.string().required("Required"),
     });
@@ -58,27 +51,11 @@ const NewRecipePage: NextPage = () => {
     duration: Yup.number().min(1).max(600).required("Required"),
   });
 
-  const addIngredientField = (ingredients: RecipeDetailsIngredientsModel[]) => {
-    setIngredientFields([
-      ...ingredients,
-      {
-        title: "",
-        quantity: "",
-      },
-    ]);
-  };
-
-  const getMultipeIngredientsFields = () => {
-    return ingredientFields?.map((ingredient, index) => {
-      return <IngredientFormField index={index} key={index} />;
-    });
-  };
-
   const handleAddNewRecipe = (
     values: NewRecipeModel,
     setSubmitting: (state: boolean) => void
   ) => {
-    const { creator, image, ingredients, recipeName, duration } = values;
+    const { creator, image, recipeName, duration, ingredients, type } = values;
 
     const data = {
       creator,
@@ -86,10 +63,12 @@ const NewRecipePage: NextPage = () => {
       ingredients,
       recipeName,
       duration,
+      type,
     };
 
     const successAction = (res: AxiosResponse) => {
       console.log(res);
+
       dispatch(
         NotificationActions.setPopupProperties({
           content: "Recipe created!",
@@ -135,11 +114,10 @@ const NewRecipePage: NextPage = () => {
         initialValues={formProperties}
         validationSchema={NewRecipeSchema}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
           handleAddNewRecipe(values, setSubmitting);
         }}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting }) => (
           <Form>
             <div className={fieldWrapperClassName}>
               <div className={labelClassName}>Title</div>
@@ -154,16 +132,7 @@ const NewRecipePage: NextPage = () => {
                 name="recipeName"
               />
             </div>
-            <div>
-              {getMultipeIngredientsFields()}
-              <div
-                onClick={() => addIngredientField(values.ingredients)}
-                className="flex items-center font-medium text-zinc-500 gap-1 -mt-2 cursor-pointer text-sm hover:text-zinc-700"
-              >
-                <FaPlusSquare className="text-orange-500" />
-                Add Ingredient
-              </div>
-            </div>
+            <Ingredients />
             <div className="flex items-center gap-4">
               <div className={`${fieldWrapperClassName} w-1/3`}>
                 <div className={labelClassName}>Type</div>
@@ -235,48 +204,3 @@ const NewRecipePage: NextPage = () => {
 };
 
 export default NewRecipePage;
-
-type IngredientFormFieldProps = {
-  index: number;
-};
-const IngredientFormField: FC<IngredientFormFieldProps> = ({ index }) => {
-  const fieldPlaceholder = `#${index + 1} ingredient`;
-
-  const errorMessageClassName = "text-sm text-red-400 font-medium";
-  const fieldWrapperClassName = "w-full my-6";
-  const fieldClassName =
-    "w-full bg-transparent border-b-2 py-1 outline-none hover:shadow-md focus:shadow-md px-1";
-  const labelClassName = "text-sm font-medium px-1";
-
-  return (
-    <div className={fieldWrapperClassName}>
-      <div className={labelClassName}>Ingredients</div>
-      <div className="flex gap-2">
-        <div className="w-1/2">
-          <Field
-            placeholder={fieldPlaceholder}
-            className={fieldClassName}
-            name={`ingredients[${index}].title`}
-          />
-          <ErrorMessage
-            component="div"
-            className={errorMessageClassName}
-            name={`ingredients[${index}].title`}
-          />
-        </div>
-        <div>
-          <Field
-            placeholder="quantity ( specify UoM )"
-            className={fieldClassName}
-            name={`ingredients[${index}].quantity`}
-          />
-          <ErrorMessage
-            component="div"
-            className={errorMessageClassName}
-            name={`ingredients[${index}].quantity`}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
