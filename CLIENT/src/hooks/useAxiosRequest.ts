@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthState } from "../models/AuthModel";
 import { NotificationTypes } from "../models/NotificationModel";
+import { LoadingActions } from "../redux/reducers/loadingReducer";
 import { NotificationActions } from "../redux/reducers/notificationReducer";
 import { RootState } from "../redux/reducers/reducers";
 
@@ -33,6 +34,8 @@ const useAxiosRequest = () => {
         errorAction: (err: AxiosError) => void,
         finallyAction?: () => void
     ) => {
+        dispatch(LoadingActions.setLoading(true))
+
         const httpAbortController = new AbortController();
         activeHttpRequests.current.push(httpAbortController)
 
@@ -56,7 +59,7 @@ const useAxiosRequest = () => {
                 }))
                 errorAction(err);
             })
-            .finally(() => finallyAction && finallyAction())
+            .finally(() => { dispatch(LoadingActions.setLoading(false)); finallyAction && finallyAction() })
     }, [])
 
 

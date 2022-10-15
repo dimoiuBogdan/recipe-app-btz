@@ -9,11 +9,11 @@ export type TopRatedRecipeModel = {
 
 
 export type AllRecipeModel = {
-    id: string;
+    _id: string;
     image: string;
-    title: string;
     creator: string;
     duration: string;
+    recipeName: string;
     type: RecipeFilterTypes;
 }
 

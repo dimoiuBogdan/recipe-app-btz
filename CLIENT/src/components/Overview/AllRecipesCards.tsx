@@ -1,53 +1,64 @@
+import { AxiosError, AxiosResponse } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { ImSpoonKnife } from "react-icons/im";
-import { RECIPE_DETAILS_ROUTE } from "../../constants/routes";
-import { AllRecipeModel, RecipeFilterTypes } from "../../models/RecipeModels";
+import { useDispatch, useSelector } from "react-redux";
+import useAxiosRequest from "../../hooks/useAxiosRequest";
+import { NotificationTypes } from "../../models/NotificationModel";
+import { AllRecipeModel } from "../../models/RecipeModels";
+import { NotificationActions } from "../../redux/reducers/notificationReducer";
+import { RootState } from "../../redux/reducers/reducers";
+import Loading from "../Loading/Loading";
 
 const AllRecipesCards: FC<any> = () => {
-  const allRecipes: AllRecipeModel[] = [
-    {
-      id: "r-1",
-      creator: "Dimoiu Bogdan",
-      duration: "2h 20min",
-      image:
-        "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=09f17a6d679b013e15f0980f59ed1b295961ccd59bd9bcd7ac0b14dd11590f4a&ipo=images",
-      title: "Cereal Bowl",
-      type: RecipeFilterTypes.Breakfast,
-    },
-    {
-      id: "r-2",
-      creator: "Chiorean Andrei",
-      duration: "5min",
-      image:
-        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Z2UqjvJJVRaPzyCvj8ZNMAHaE8%26pid%3DApi&f=1&ipt=150a91894a7fc6ac8b728e4952c82bafe15b2c08fb9b79346e601f4cd9ea452c&ipo=images",
-      title: "Orice la airfryer",
-      type: RecipeFilterTypes.Dinner,
-    },
-    {
-      id: "r-3",
-      creator: "Un fecior Perfect",
-      duration: "69h",
-      image:
-        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyukiosteriyaki.com%2Flibrary%2Fsite%2FSushi-rolls-with-wassabi.jpgsQDCkUlyQ.MQoCf5U0Sm2_K2tad4PVYV&f=1&nofb=1&ipt=7522d2390da69d5001f8080cf32a71d563df6fbac92d38392ef91bd047604bc0&ipo=images",
-      title: "Un pui",
-      type: RecipeFilterTypes.Lunch,
-    },
-  ];
+  const { axiosRequest } = useAxiosRequest();
+  const dispatch = useDispatch();
+
+  const [allRecipes, setAllRecipes] = useState<AllRecipeModel[]>([]);
+  const loading = useSelector<RootState, boolean>(
+    (s) => s.loadingReducer.loadingState
+  );
+
+  const successAction = (res: AxiosResponse) => {
+    const { recipes } = res.data as { recipes: AllRecipeModel[] };
+
+    setAllRecipes(recipes);
+  };
+
+  const errorAction = (err: AxiosError) => {
+    console.log(err);
+
+    dispatch(
+      NotificationActions.setPopupProperties({
+        content: "Something went wrong retrieving all recipes",
+        type: NotificationTypes.Error,
+      })
+    );
+  };
+
+  useEffect(() => {
+    axiosRequest(
+      "get",
+      "http://localhost:5000/api/recipes",
+      {},
+      successAction,
+      errorAction
+    );
+  }, []);
 
   const getAllRecipesContent = () => {
-    return allRecipes.map((recipe) => {
-      const { creator, duration, image, title, type, id } = recipe;
+    return allRecipes?.map((recipe) => {
+      const { creator, duration, image, recipeName, type, _id } = recipe;
 
       return (
         <AllRecipeCard
-          id={id}
-          key={id}
+          _id={_id}
+          key={_id}
           type={type}
           image={image}
-          title={title}
+          recipeName={recipeName}
           creator={creator}
           duration={duration}
         />
@@ -55,25 +66,29 @@ const AllRecipesCards: FC<any> = () => {
     });
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return <div className="flex flex-wrap">{getAllRecipesContent()}</div>;
 };
 
 export default AllRecipesCards;
 
 const AllRecipeCard: FC<AllRecipeModel> = ({
-  id,
+  _id,
   type,
   image,
-  title,
   creator,
   duration,
+  recipeName,
 }) => {
   const router = useRouter();
 
   const redirectToRecipeDetails = () => {
     router.push({
       pathname: "/recipes/[recipeId]",
-      query: { recipeId: id },
+      query: { recipeId: _id },
     });
   };
 
@@ -85,7 +100,7 @@ const AllRecipeCard: FC<AllRecipeModel> = ({
             className="rounded-lg object-cover object-center shadow-sm"
             width="120"
             height="100"
-            alt={title}
+            alt={recipeName}
             src={image}
           />
           <div className="ml-2 flex flex-col justify-between flex-1">
@@ -96,7 +111,9 @@ const AllRecipeCard: FC<AllRecipeModel> = ({
               </div>
             </div>
             <div>
-              <div className="text-lg font-medium text-orange-700">{title}</div>
+              <div className="text-lg font-medium text-orange-700">
+                {recipeName}
+              </div>
               <div className="text-sm font-medium">
                 <span className="font-normal">by </span>
                 {creator.toUpperCase()}
