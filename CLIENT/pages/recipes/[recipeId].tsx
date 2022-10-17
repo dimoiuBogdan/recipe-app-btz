@@ -1,15 +1,38 @@
+import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../src/components/Recipe/Navbar";
 import RecipeDetails from "../../src/components/Recipe/RecipeDetails";
 import RecipeIngredients from "../../src/components/Recipe/RecipeIngredients";
 import RecipeNutrients from "../../src/components/Recipe/RecipeNutrients";
 import RecipePreparation from "../../src/components/Recipe/RecipePreparation";
+import useAxiosRequest from "../../src/hooks/useAxiosRequest";
 import { RecipeDetailsModel } from "../../src/models/RecipeModels";
 
 const RecipePage = () => {
   const router = useRouter();
-  const { recipeId } = router.query;
+  const { recipeId } = router.query as { recipeId: string };
+  const { axiosRequest } = useAxiosRequest();
+
+  const successAction = (res: AxiosResponse) => {
+    console.log(res);
+  };
+
+  const errorAction = (err: AxiosError) => {
+    console.log(err);
+  };
+
+  useEffect(() => {
+    if (recipeId) {
+      axiosRequest(
+        "get",
+        `http://localhost:5000/api/recipes/${recipeId}/details`,
+        {},
+        successAction,
+        errorAction
+      );
+    }
+  }, [recipeId]);
 
   const DUMMY_RECIPE_DETAILS: RecipeDetailsModel = {
     description: "Healthy pancakes combine with grapes.",
@@ -83,7 +106,7 @@ const RecipePage = () => {
     <div>
       <Navbar />
       <RecipeDetails
-        id={DUMMY_RECIPE_DETAILS.id}
+        id={recipeId}
         image={DUMMY_RECIPE_DETAILS.image}
         title={DUMMY_RECIPE_DETAILS.title}
         duration={DUMMY_RECIPE_DETAILS.duration}

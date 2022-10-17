@@ -9,11 +9,13 @@ const router = express.Router();
 
 router.get("/", recipesController.getAllRecipes);
 
+router.get("/:rid/details", recipesController.getRecipeDetails);
+
 router.get("/user/:uid", recipesController.getRecipesByUserId);
 
 router.get("/:rid", recipesController.getRecipeById);
 
-router.use(checkAuth);
+router.use(checkAuth); // routes underneath will need authorization
 
 router.post("/", createRecipeValidation, recipesController.createRecipe);
 

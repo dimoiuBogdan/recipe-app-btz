@@ -11,6 +11,25 @@ const getAllRecipes = async (req, res, next) => {
   });
 };
 
+const getRecipeDetails = async (req, res, next) => {
+  const recipeId = req.params.rid;
+  let recipeDetails;
+
+  try {
+    recipeDetails = await Recipe.findById(recipeId);
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError(
+        "Fetching recipe details failed, please try again later",
+        500
+      )
+    );
+  }
+
+  res.json({ recipeDetails });
+};
+
 const getRecipesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
@@ -181,3 +200,4 @@ exports.createRecipe = createRecipe;
 exports.getAllRecipes = getAllRecipes;
 exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
+exports.getRecipeDetails = getRecipeDetails;
