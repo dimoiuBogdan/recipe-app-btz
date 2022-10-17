@@ -62,7 +62,7 @@ const NewRecipePage: NextPage = () => {
       image,
       ingredients,
       recipeName,
-      duration,
+      duration: `${duration} min`,
       type,
     };
 

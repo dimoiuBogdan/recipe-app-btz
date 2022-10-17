@@ -23,6 +23,10 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+  duration: {
+    type: String,
+    required: true,
+  },
   recipeName: {
     type: String,
     required: true,
