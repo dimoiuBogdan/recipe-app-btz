@@ -12,6 +12,7 @@ export type AllRecipeModel = {
     _id: string;
     image: string;
     creator: string;
+    creatorUsername: string;
     duration: string;
     recipeName: string;
     type: RecipeFilterTypes;

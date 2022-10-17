@@ -19,6 +19,10 @@ const recipeSchema = new Schema({
     ref: "User",
     required: true,
   },
+  creatorUsername: {
+    type: String,
+    required: true,
+  },
   type: {
     type: String,
     required: true,

@@ -50,7 +50,15 @@ const AllRecipesCards: FC<any> = () => {
 
   const getAllRecipesContent = () => {
     return allRecipes?.map((recipe) => {
-      const { creator, duration, image, recipeName, type, _id } = recipe;
+      const {
+        creator,
+        duration,
+        image,
+        recipeName,
+        type,
+        creatorUsername,
+        _id,
+      } = recipe;
 
       return (
         <AllRecipeCard
@@ -60,6 +68,7 @@ const AllRecipesCards: FC<any> = () => {
           image={image}
           recipeName={recipeName}
           creator={creator}
+          creatorUsername={creatorUsername}
           duration={duration}
         />
       );
@@ -80,6 +89,7 @@ const AllRecipeCard: FC<AllRecipeModel> = ({
   type,
   image,
   creator,
+  creatorUsername,
   duration,
   recipeName,
 }) => {
@@ -114,9 +124,9 @@ const AllRecipeCard: FC<AllRecipeModel> = ({
               <div className="text-lg font-medium text-orange-700">
                 {recipeName}
               </div>
-              <div className="text-sm font-medium">
+              <div className="text-sm font-medium whitespace-nowrap text-ellipsis overflow-hidden w-4/5">
                 <span className="font-normal">by </span>
-                {creator.toUpperCase()}
+                {creatorUsername.toUpperCase()}
               </div>
             </div>
             <div className="flex items-center text-sm">
