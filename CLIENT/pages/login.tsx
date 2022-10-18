@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import React from "react";
-import AuthModal from "../../src/components/Auth/AuthModal";
-import LoginForm from "../../src/components/Auth/Login/LoginForm";
+import AuthModal from "../src/components/Auth/AuthModal";
+import LoginForm from "../src/components/Auth/Login/LoginForm";
 
 const LoginPage: NextPage = () => {
   return (

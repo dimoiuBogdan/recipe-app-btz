@@ -24,14 +24,16 @@ export type RecipeFiltersModel = {
 }
 
 export type RecipeDetailsModel = {
-    id: string;
-    image: string;
-    title: string;
-    description: string;
-    nutrients: RecipeDetailsNutrientsModel[];
-    ingredients: RecipeDetailsIngredientsModel[];
-    steps: RecipeDetailsStepsModel[];
+    creator: string;
+    creatorUsername: string;
     duration: string;
+    image: string;
+    ingredients: RecipeDetailsIngredientsModel[];
+    recipeName: string;
+    type: RecipeFilterTypes;
+    description: string; // to add
+    nutrients: RecipeDetailsNutrientsModel[]; // to add
+    steps: RecipeDetailsStepsModel[]; // to add
 }
 
 export type RecipeDetailsIngredientsModel = {

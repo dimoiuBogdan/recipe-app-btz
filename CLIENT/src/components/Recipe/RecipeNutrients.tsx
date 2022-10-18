@@ -6,14 +6,27 @@ type RecipeNutrientsProps = {
 };
 const RecipeNutrients: FC<RecipeNutrientsProps> = ({ nutrients }) => {
   const getContent = () => {
-    return nutrients.map((nutrient, index) => {
-      const { quantity, title } = nutrient;
+    if (nutrients) {
+      return nutrients.map((nutrient, index) => {
+        const { quantity, title } = nutrient;
 
-      return (
-        <Nutrient key={index} index={index} quantity={quantity} title={title} />
-      );
-    });
+        return (
+          <Nutrient
+            key={index}
+            index={index}
+            quantity={quantity}
+            title={title}
+          />
+        );
+      });
+    }
+
+    return "-";
   };
+
+  if (!nutrients || !nutrients.length) {
+    return <></>;
+  }
 
   return (
     <div className="my-4">

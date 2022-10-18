@@ -1,30 +1,49 @@
 import React, { FC } from "react";
 
-const ActionBar = () => {
-  return <div>ActionBar</div>;
+type ActionBarProps = {
+  isShown: boolean;
+};
+const ActionBar: FC<ActionBarProps> = ({ isShown }) => {
+  if (!isShown) {
+    return <></>;
+  }
+
+  return (
+    <div className="absolute top-6 overflow-hidden shadow-md w-44 rounded-lg text-base">
+      <ActionBarElement
+        action={() => {
+          console.log("1");
+        }}
+        text="Favorite"
+      />
+      <ActionBarElement
+        action={() => {
+          console.log("2");
+        }}
+        text="Delete"
+      />
+      <ActionBarElement
+        action={() => {
+          console.log("3");
+        }}
+        text="Edit"
+      />
+    </div>
+  );
 };
 
 export default ActionBar;
 
 type ActionBarElementProps = {
-  icon: any;
   text: string;
-  shown: boolean;
   action: () => void;
 };
-const ActionBarElement: FC<ActionBarElementProps> = ({
-  icon,
-  text,
-  shown,
-  action,
-}) => {
-  if (!shown) {
-    return <></>;
-  }
-
+const ActionBarElement: FC<ActionBarElementProps> = ({ text, action }) => {
   return (
-    <div onClick={action} className="flex items-center">
-      {icon}
+    <div
+      onClick={action}
+      className="py-1 px-2 bg-orange-200 bg-opacity-50 hover:bg-opacity-75 cursor-pointer"
+    >
       <div>{text}</div>
     </div>
   );

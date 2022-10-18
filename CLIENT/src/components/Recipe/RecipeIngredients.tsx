@@ -12,11 +12,15 @@ const RecipeIngredients: FC<RecipeIngredientsProps> = ({ ingredients }) => {
     });
   };
 
+  const getItemsTerm = ingredients?.length === 1 ? "item" : "items";
+
   return (
     <div className="mt-8">
       <div className="flex items-baseline">
         <div className="mb-2 text-lg font-medium">Ingredients</div>
-        <div className="text-zinc-500 ml-1">({ingredients.length} items)</div>
+        <div className="text-zinc-500 ml-1">
+          ({ingredients.length} {getItemsTerm})
+        </div>
       </div>
       <div className="flex flex-wrap">{getContent()}</div>
     </div>
