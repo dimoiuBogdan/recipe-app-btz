@@ -161,11 +161,10 @@ const deleteRecipe = async (req, res, next) => {
 
   let recipeToDelete;
   try {
-    // using .populate() because the "creator" property ( from other collections ) will be modified ( see line 157 )
+    // using .populate() because the "creator" property ( from other collections ) will be modified
     recipeToDelete = await Recipe.findById(recipeToDeleteId).populate(
       "creator"
     );
-    console.log(recipeToDelete);
   } catch (error) {
     console.log(error);
     return next(new HttpError("Deleting recipe failed", 500));

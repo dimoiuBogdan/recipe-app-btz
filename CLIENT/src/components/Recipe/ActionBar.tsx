@@ -1,9 +1,55 @@
+import { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/router";
 import React, { FC } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import useAxiosRequest from "../../hooks/useAxiosRequest";
+import { NotificationTypes } from "../../models/NotificationModel";
+import { NotificationActions } from "../../redux/reducers/notificationReducer";
+import { RootState } from "../../redux/reducers/reducers";
 
 type ActionBarProps = {
   isShown: boolean;
+  creatorId: string;
+  recipeId: string;
 };
-const ActionBar: FC<ActionBarProps> = ({ isShown }) => {
+const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { axiosRequest } = useAxiosRequest();
+  const userId = useSelector<RootState, string>((s) => s.authReducer.userId);
+
+  const recipeBelongsToConnectedUser = creatorId && userId === creatorId;
+
+  const deleteRecipe = () => {
+    axiosRequest(
+      "delete",
+      `http://localhost:5000/api/recipes/${recipeId}`,
+      {},
+      (res: AxiosResponse) => {
+        dispatch(
+          NotificationActions.setPopupProperties({
+            content: "Recipe deleted successfully, you will now be redirected",
+            type: NotificationTypes.Success,
+          })
+        );
+
+        setTimeout(() => {
+          router.replace("/overview");
+        }, 3000);
+      },
+      (err: AxiosError) => {
+        console.log(err);
+
+        dispatch(
+          NotificationActions.setPopupProperties({
+            content: "Recipe could not be deleted",
+            type: NotificationTypes.Error,
+          })
+        );
+      }
+    );
+  };
+
   if (!isShown) {
     return <></>;
   }
@@ -18,16 +64,21 @@ const ActionBar: FC<ActionBarProps> = ({ isShown }) => {
       />
       <ActionBarElement
         action={() => {
-          console.log("2");
+          console.log("1");
         }}
-        text="Delete"
+        text="Share"
       />
-      <ActionBarElement
-        action={() => {
-          console.log("3");
-        }}
-        text="Edit"
-      />
+      {recipeBelongsToConnectedUser && (
+        <>
+          <ActionBarElement action={deleteRecipe} text="Delete" />
+          <ActionBarElement
+            action={() => {
+              console.log("3");
+            }}
+            text="Edit"
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -55,7 +55,7 @@ const RecipePage = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar creatorId={recipeDetails.creator} recipeId={recipeId} />
       <RecipeDetails
         type={recipeDetails.type}
         image={recipeDetails.image}

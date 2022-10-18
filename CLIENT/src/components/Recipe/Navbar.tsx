@@ -1,9 +1,13 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaEllipsisH } from "react-icons/fa";
 import ActionBar from "./ActionBar";
 
-const Navbar = () => {
+type NavbarProps = {
+  creatorId: string;
+  recipeId: string;
+};
+const Navbar: FC<NavbarProps> = ({ creatorId, recipeId }) => {
   const router = useRouter();
   const ref = useRef<any>(null);
   const [isShown, setIsShown] = useState<boolean>(false);
@@ -31,12 +35,17 @@ const Navbar = () => {
         className="cursor-pointer"
       />
       <div className="flex-1 text-center">Recipe Details</div>
-      <div ref={ref} className="relative flex justify-end">
-        <FaEllipsisH
-          onClick={() => setIsShown(!isShown)}
-          className="cursor-pointer"
+      <div
+        onClick={() => setIsShown(!isShown)}
+        ref={ref}
+        className="relative flex justify-end"
+      >
+        <FaEllipsisH className="cursor-pointer" />
+        <ActionBar
+          recipeId={recipeId}
+          creatorId={creatorId}
+          isShown={isShown}
         />
-        <ActionBar isShown={isShown} />
       </div>
     </div>
   );
