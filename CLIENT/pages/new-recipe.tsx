@@ -5,6 +5,7 @@ import React, { FC, useState } from "react";
 import {
   NewRecipeModel,
   RecipeDetailsIngredientsModel,
+  RecipeDetailsStepsModel,
   RecipeFilterTypes,
 } from "../src/models/RecipeModels";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import { getSubmitButtonLabel } from "../src/services/AuthService";
 import { RootState } from "../src/redux/reducers/reducers";
 import Ingredients from "../src/components/NewRecipe/Ingredients";
 import { v4 } from "uuid";
+import Steps from "../src/components/NewRecipe/Steps";
 
 const NewRecipePage: NextPage = () => {
   const dispatch = useDispatch();
@@ -28,6 +30,7 @@ const NewRecipePage: NextPage = () => {
     image:
       "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=09f17a6d679b013e15f0980f59ed1b295961ccd59bd9bcd7ac0b14dd11590f4a&ipo=images",
     ingredients: [{ id: v4(), quantity: "", title: "" }],
+    steps: [{ id: v4(), description: "" }],
     recipeName: "",
     duration: undefined,
     type: undefined,
@@ -40,6 +43,13 @@ const NewRecipePage: NextPage = () => {
       title: Yup.string().required("Required"),
     });
 
+  const StepsSchema: Yup.SchemaOf<RecipeDetailsStepsModel> = Yup.object().shape(
+    {
+      id: Yup.string().required("Required"),
+      description: Yup.string().required("Required"),
+    }
+  );
+
   const NewRecipeSchema: Yup.SchemaOf<NewRecipeModel> = Yup.object().shape({
     image: Yup.string().required("Required"),
     creator: Yup.string().required("Required"),
@@ -49,26 +59,27 @@ const NewRecipePage: NextPage = () => {
       .oneOf(Object.values(RecipeFilterTypes))
       .required("Required"),
     duration: Yup.number().min(1).max(600).required("Required"),
+    steps: Yup.array().of(StepsSchema).min(1).required("Required"),
   });
 
   const handleAddNewRecipe = (
     values: NewRecipeModel,
     setSubmitting: (state: boolean) => void
   ) => {
-    const { creator, image, recipeName, duration, ingredients, type } = values;
+    const { creator, image, recipeName, duration, ingredients, type, steps } =
+      values;
 
     const data = {
       creator,
       image,
       ingredients,
+      steps,
       recipeName,
       duration: `${duration} min`,
       type,
     };
 
     const successAction = (res: AxiosResponse) => {
-      console.log(res);
-
       dispatch(
         NotificationActions.setPopupProperties({
           content: "Recipe created!",
@@ -133,6 +144,7 @@ const NewRecipePage: NextPage = () => {
               />
             </div>
             <Ingredients />
+            <Steps />
             <div className="flex items-center gap-4">
               <div className={`${fieldWrapperClassName} w-1/3`}>
                 <div className={labelClassName}>Type</div>

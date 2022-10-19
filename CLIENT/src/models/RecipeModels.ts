@@ -48,6 +48,7 @@ export type RecipeDetailsNutrientsModel = {
 }
 
 export type RecipeDetailsStepsModel = {
+    id: string;
     description: string;
 }
 
@@ -55,6 +56,7 @@ export type NewRecipeModel = {
     creator: string | undefined;
     recipeName: string;
     ingredients: RecipeDetailsIngredientsModel[];
+    steps: RecipeDetailsStepsModel[];
     image: string;
     type: RecipeFilterTypes | undefined;
     duration: number | undefined;

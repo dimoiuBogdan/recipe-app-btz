@@ -47,7 +47,7 @@ const Ingredients: FC = () => {
   const labelClassName = "text-sm font-medium px-1";
 
   return (
-    <div>
+    <div className="mb-6">
       <div className={labelClassName}>Ingredients</div>
       {getMultipeIngredientsFields()}
       <div

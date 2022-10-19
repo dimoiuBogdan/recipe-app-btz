@@ -13,6 +13,13 @@ const ingredientsSubSchema = new Schema({
   },
 });
 
+const stepsSubSchema = new Schema({
+  description: {
+    type: String,
+    required: true,
+  },
+});
+
 const recipeSchema = new Schema({
   creator: {
     type: mongoose.Types.ObjectId,
@@ -37,6 +44,10 @@ const recipeSchema = new Schema({
   },
   ingredients: {
     type: [ingredientsSubSchema],
+    required: true,
+  },
+  steps: {
+    type: [stepsSubSchema],
     required: true,
   },
   image: {

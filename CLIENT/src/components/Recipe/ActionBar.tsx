@@ -35,7 +35,7 @@ const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
 
         setTimeout(() => {
           router.replace("/overview");
-        }, 3000);
+        }, 1500);
       },
       (err: AxiosError) => {
         console.log(err);
