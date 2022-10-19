@@ -138,7 +138,13 @@ const editRecipe = async (req, res, next) => {
   try {
     recipeToEdit = await Recipe.findById(recipeToEditId);
   } catch (error) {
-    return next(new HttpError("Could not update recipe."), 500);
+    return next(new HttpError("Could not find recipe."), 500);
+  }
+
+  if (recipeToDelete.creator._id.toString() !== req.userData.userId) {
+    return next(
+      new HttpError("You are not allowed to delete this recipe", 401)
+    );
   }
 
   recipeToEdit.title = title;
@@ -173,6 +179,12 @@ const deleteRecipe = async (req, res, next) => {
 
   if (!recipeToDelete) {
     return next(new HttpError("Could not find recipe for this id", 404));
+  }
+
+  if (recipeToDelete.creator._id.toString() !== req.userData.userId) {
+    return next(
+      new HttpError("You are not allowed to delete this recipe", 401)
+    );
   }
 
   try {
