@@ -1,17 +1,18 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthState } from "../models/AuthModel";
 import { NotificationTypes } from "../models/NotificationModel";
+import { AuthContext } from "../redux/AuthContext";
 import { LoadingActions } from "../redux/reducers/loadingReducer";
 import { NotificationActions } from "../redux/reducers/notificationReducer";
 import { RootState } from "../redux/reducers/reducers";
 
 const useAxiosRequest = () => {
     const dispatch = useDispatch();
+    const { token } = useContext(AuthContext);
     const activeHttpRequests = useRef<AbortController[]>([]);
 
-    const { token } = useSelector<RootState, AuthState>(s => s.authReducer)
 
     useEffect(() => {
         return () => {

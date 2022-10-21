@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { NextPage } from "next";
 import * as Yup from "yup";
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import {
   NewRecipeModel,
   RecipeDetailsIngredientsModel,
@@ -18,12 +18,12 @@ import { RootState } from "../src/redux/reducers/reducers";
 import Ingredients from "../src/components/NewRecipe/Ingredients";
 import { v4 } from "uuid";
 import Steps from "../src/components/NewRecipe/Steps";
+import { AuthContext } from "../src/redux/AuthContext";
 
 const NewRecipePage: NextPage = () => {
   const dispatch = useDispatch();
   const { axiosRequest } = useAxiosRequest();
-
-  const userId = useSelector<RootState, string>((s) => s.authReducer.userId);
+  const { userId } = useContext(AuthContext);
 
   const formProperties: NewRecipeModel = {
     creator: userId || undefined,
@@ -216,3 +216,11 @@ const NewRecipePage: NextPage = () => {
 };
 
 export default NewRecipePage;
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  };
+}

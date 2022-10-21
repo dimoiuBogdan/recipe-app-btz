@@ -11,7 +11,7 @@ import { NotificationTypes } from "../../../models/NotificationModel";
 import { useRouter } from "next/router";
 import { OVERVIEW_PAGE_ROUTE } from "../../../constants/routes";
 import useAxiosRequest from "../../../hooks/useAxiosRequest";
-import { AuthActions } from "../../../redux/reducers/authReducer";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 type FormProperties = {
   email: string;
@@ -20,8 +20,9 @@ type FormProperties = {
 
 const LoginForm: FC<any> = () => {
   const router = useRouter();
-  const { axiosRequest } = useAxiosRequest();
   const dispatch = useDispatch();
+  const { setItem } = useLocalStorage();
+  const { axiosRequest } = useAxiosRequest();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -53,14 +54,7 @@ const LoginForm: FC<any> = () => {
     const successAction = (res: AxiosResponse) => {
       const { userId, token } = res.data as { userId: string; token: string };
 
-      console.log(res);
-
-      dispatch(
-        AuthActions.setAuthProperties({
-          token,
-          userId,
-        })
-      );
+      setItem("btz-token", { token, userId });
 
       dispatch(
         NotificationActions.setPopupProperties({

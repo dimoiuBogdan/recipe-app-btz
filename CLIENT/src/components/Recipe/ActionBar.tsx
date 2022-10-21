@@ -1,9 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useAxiosRequest from "../../hooks/useAxiosRequest";
 import { NotificationTypes } from "../../models/NotificationModel";
+import { AuthContext } from "../../redux/AuthContext";
 import { NotificationActions } from "../../redux/reducers/notificationReducer";
 import { RootState } from "../../redux/reducers/reducers";
 
@@ -16,7 +17,7 @@ const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { axiosRequest } = useAxiosRequest();
-  const userId = useSelector<RootState, string>((s) => s.authReducer.userId);
+  const { userId } = useContext(AuthContext);
 
   const recipeBelongsToConnectedUser = creatorId && userId === creatorId;
 
