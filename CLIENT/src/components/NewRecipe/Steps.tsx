@@ -43,11 +43,9 @@ const Steps = () => {
     });
   };
 
-  const labelClassName = "text-sm font-medium px-1";
-
   return (
     <div>
-      <div className={labelClassName}>Steps</div>
+      <div className="labelClassName">Steps</div>
       {getMultipeStepsFields()}
       <div
         onClick={() => addStepField(steps)}
@@ -74,13 +72,8 @@ const StepFormField: FC<StepFormFieldProps> = ({
 }) => {
   const fieldPlaceholder = `#${index + 1} step`;
 
-  const errorMessageClassName = "text-sm text-red-400 font-medium";
-  const fieldWrapperClassName = "w-full mb-6";
-  const fieldClassName =
-    "w-full bg-transparent border-b-2 py-1 outline-none hover:shadow-md focus:shadow-md px-1";
-
   return (
-    <div className={fieldWrapperClassName}>
+    <div className="mb-4">
       <div className="flex gap-2 items-center">
         <div className="w-1/2">
           <Field
@@ -91,12 +84,12 @@ const StepFormField: FC<StepFormFieldProps> = ({
           />
           <Field
             placeholder={fieldPlaceholder}
-            className={fieldClassName}
+            className="fieldClassName"
             name={`steps[${index}].description`}
           />
           <ErrorMessage
             component="div"
-            className={errorMessageClassName}
+            className="errorMessageClassName"
             name={`steps[${index}].description`}
           />
         </div>

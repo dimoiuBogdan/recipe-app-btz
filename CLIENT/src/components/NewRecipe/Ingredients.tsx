@@ -44,11 +44,9 @@ const Ingredients: FC = () => {
     });
   };
 
-  const labelClassName = "text-sm font-medium px-1";
-
   return (
     <div className="mb-6">
-      <div className={labelClassName}>Ingredients</div>
+      <div className="labelClassName">Ingredients</div>
       {getMultipeIngredientsFields()}
       <div
         onClick={() => addIngredientField(ingredients)}
@@ -75,13 +73,8 @@ const IngredientFormField: FC<IngredientFormFieldProps> = ({
 }) => {
   const fieldPlaceholder = `#${index + 1} ingredient`;
 
-  const errorMessageClassName = "text-sm text-red-400 font-medium";
-  const fieldWrapperClassName = "w-full mb-6";
-  const fieldClassName =
-    "w-full bg-transparent border-b-2 py-1 outline-none hover:shadow-md focus:shadow-md px-1";
-
   return (
-    <div className={fieldWrapperClassName}>
+    <div className="mb-4">
       <div className="flex gap-2 items-center">
         <div className="w-1/2">
           <Field
@@ -92,24 +85,24 @@ const IngredientFormField: FC<IngredientFormFieldProps> = ({
           />
           <Field
             placeholder={fieldPlaceholder}
-            className={fieldClassName}
+            className="fieldClassName"
             name={`ingredients[${index}].title`}
           />
           <ErrorMessage
             component="div"
-            className={errorMessageClassName}
+            className="errorMessageClassName"
             name={`ingredients[${index}].title`}
           />
         </div>
         <div>
           <Field
             placeholder="quantity ( specify UoM )"
-            className={fieldClassName}
+            className="fieldClassName"
             name={`ingredients[${index}].quantity`}
           />
           <ErrorMessage
             component="div"
-            className={errorMessageClassName}
+            className="errorMessageClassName"
             name={`ingredients[${index}].quantity`}
           />
         </div>

@@ -38,13 +38,9 @@ const ImageUpload: FC<any> = () => {
     fileReader.readAsDataURL(file);
   }, [file]);
 
-  const errorMessageClassName = "text-sm text-red-400 font-medium";
-  const fieldWrapperClassName = "w-full my-6";
-  const labelClassName = "text-sm font-medium px-1";
-
   return (
-    <div className={`${fieldWrapperClassName} w-1/3`}>
-      <div className={labelClassName}>Image</div>
+    <div className="fieldWrapperClassName w-1/3">
+      <div className="labelClassName">Image</div>
       <div className="mt-1">
         <Field
           placeholder="Hours"
@@ -78,7 +74,7 @@ const ImageUpload: FC<any> = () => {
               )}
               <ErrorMessage
                 component="div"
-                className={errorMessageClassName}
+                className="errorMessageClassName"
                 name="image"
               />
             </>

@@ -32,3 +32,19 @@ a {
 .ellipsis {
   @apply overflow-hidden text-ellipsis whitespace-nowrap
 }
+
+.fieldWrapperClassName {
+  @apply w-full my-6
+}
+
+.labelClassName {
+  @apply text-sm font-medium px-1
+}
+
+.fieldClassName {
+  @apply w-full bg-transparent border-b-2 py-1 outline-none hover:shadow-md focus:shadow-md px-1
+}
+
+.errorMessageClassName {
+  @apply text-sm text-red-400 font-medium
+}
