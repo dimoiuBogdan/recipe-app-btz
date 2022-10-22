@@ -28,10 +28,10 @@ function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
   useEffect(() => {
     autoLoginUser();
 
-    if (pageProps.protected && !token && !userId) {
+    if (pageProps.protected && token === "" && userId === "") {
       router.push("/unauthorized");
     }
-  }, [autoLoginUser, pageProps, router, token, userId]);
+  }, [token, userId, pageProps]);
 
   useEffect(() => {
     manageTokenExpiration();
