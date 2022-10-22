@@ -1,16 +1,18 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthState } from "../models/AuthModel";
 import { NotificationTypes } from "../models/NotificationModel";
+import { AuthContext } from "../redux/AuthContext";
+import { LoadingActions } from "../redux/reducers/loadingReducer";
 import { NotificationActions } from "../redux/reducers/notificationReducer";
 import { RootState } from "../redux/reducers/reducers";
 
 const useAxiosRequest = () => {
     const dispatch = useDispatch();
+    const { token } = useContext(AuthContext);
     const activeHttpRequests = useRef<AbortController[]>([]);
 
-    const { token } = useSelector<RootState, AuthState>(s => s.authReducer)
 
     useEffect(() => {
         return () => {
@@ -33,6 +35,8 @@ const useAxiosRequest = () => {
         errorAction: (err: AxiosError) => void,
         finallyAction?: () => void
     ) => {
+        dispatch(LoadingActions.setLoading(true))
+
         const httpAbortController = new AbortController();
         activeHttpRequests.current.push(httpAbortController)
 
@@ -50,15 +54,13 @@ const useAxiosRequest = () => {
                 successAction(res);
             })
             .catch((err: AxiosError) => {
-                const { message } = err.response?.data as { message: string, args: any }
-
                 dispatch(NotificationActions.setPopupProperties({
-                    content: message || "Sorry, something went wrong",
+                    content: "Sorry, something went wrong",
                     type: NotificationTypes.Error
                 }))
                 errorAction(err);
             })
-            .finally(() => finallyAction && finallyAction())
+            .finally(() => { dispatch(LoadingActions.setLoading(false)); finallyAction && finallyAction() })
     }, [])
 
 

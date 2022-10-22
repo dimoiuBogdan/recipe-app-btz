@@ -9,11 +9,12 @@ export type TopRatedRecipeModel = {
 
 
 export type AllRecipeModel = {
-    id: string;
+    _id: string;
     image: string;
-    title: string;
     creator: string;
+    creatorUsername: string;
     duration: string;
+    recipeName: string;
     type: RecipeFilterTypes;
 }
 
@@ -23,17 +24,20 @@ export type RecipeFiltersModel = {
 }
 
 export type RecipeDetailsModel = {
-    id: string;
-    image: string;
-    title: string;
-    description: string;
-    nutrients: RecipeDetailsNutrientsModel[];
-    ingredients: RecipeDetailsIngredientsModel[];
-    steps: RecipeDetailsStepsModel[];
+    creator: string;
+    creatorUsername: string;
     duration: string;
+    image: string;
+    ingredients: RecipeDetailsIngredientsModel[];
+    recipeName: string;
+    type: RecipeFilterTypes;
+    description: string; // to add
+    nutrients: RecipeDetailsNutrientsModel[]; // to add
+    steps: RecipeDetailsStepsModel[]; // to add
 }
 
 export type RecipeDetailsIngredientsModel = {
+    id: string;
     title: string;
     quantity: string;
 }
@@ -44,7 +48,18 @@ export type RecipeDetailsNutrientsModel = {
 }
 
 export type RecipeDetailsStepsModel = {
+    id: string;
     description: string;
+}
+
+export type NewRecipeModel = {
+    creator: string | undefined;
+    recipeName: string;
+    ingredients: RecipeDetailsIngredientsModel[];
+    steps: RecipeDetailsStepsModel[];
+    image: string;
+    type: RecipeFilterTypes | undefined;
+    duration: number | undefined;
 }
 
 export enum RecipeFilterTypes {

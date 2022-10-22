@@ -7,12 +7,20 @@ type RecipePreparationProps = {
 };
 const RecipePreparation: FC<RecipePreparationProps> = ({ steps }) => {
   const getContent = () => {
-    return steps.map((step, index) => {
-      const { description } = step;
+    if (steps) {
+      return steps.map((step, index) => {
+        const { description } = step;
 
-      return <Step description={description} index={index} key={index} />;
-    });
+        return <Step description={description} index={index} key={index} />;
+      });
+    }
+
+    return "-";
   };
+
+  if (!steps || !steps.length) {
+    return <></>;
+  }
 
   return (
     <div className="my-4">

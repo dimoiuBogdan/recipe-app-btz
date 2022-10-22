@@ -37,7 +37,6 @@ const NotificationPopup: FC<any> = () => {
   };
 
   const closeNotification = () => {
-    console.log("cleanNotification clg");
     dispatch(NotificationActions.closeNotification());
   };
 

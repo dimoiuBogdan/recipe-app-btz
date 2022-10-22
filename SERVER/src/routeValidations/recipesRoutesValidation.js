@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 
 const createRecipeValidation = [
-  check("title").not().isEmpty(),
+  check("recipeName").not().isEmpty(),
   check("ingredients").isArray(),
 ];
 

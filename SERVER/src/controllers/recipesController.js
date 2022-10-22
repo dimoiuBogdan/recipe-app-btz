@@ -11,6 +11,25 @@ const getAllRecipes = async (req, res, next) => {
   });
 };
 
+const getRecipeDetails = async (req, res, next) => {
+  const recipeId = req.params.rid;
+  let recipeDetails;
+
+  try {
+    recipeDetails = await Recipe.findById(recipeId);
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError(
+        "Fetching recipe details failed, please try again later",
+        500
+      )
+    );
+  }
+
+  res.json({ recipeDetails });
+};
+
 const getRecipesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
@@ -65,14 +84,20 @@ const createRecipe = async (req, res, next) => {
     return next(new HttpError("Invalid inputs passed"), 422);
   }
 
-  const { creator, title, ingredients } = req.body;
+  const { creator, recipeName, ingredients, type, duration, steps } = req.body;
+
+  const creatorDetails = await User.findById(creator);
 
   const createdRecipe = new Recipe({
-    title,
+    recipeName,
     creator,
+    creatorUsername: creatorDetails.username,
     image:
       "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=d7638e42568715f8834e529944691ecaffa6bb9c31fffc305488e61455a4d015&ipo=images",
     ingredients,
+    steps,
+    type,
+    duration,
   });
 
   let user;
@@ -113,7 +138,13 @@ const editRecipe = async (req, res, next) => {
   try {
     recipeToEdit = await Recipe.findById(recipeToEditId);
   } catch (error) {
-    return next(new HttpError("Could not update recipe."), 500);
+    return next(new HttpError("Could not find recipe."), 500);
+  }
+
+  if (recipeToDelete.creator._id.toString() !== req.userData.userId) {
+    return next(
+      new HttpError("You are not allowed to delete this recipe", 401)
+    );
   }
 
   recipeToEdit.title = title;
@@ -137,11 +168,10 @@ const deleteRecipe = async (req, res, next) => {
 
   let recipeToDelete;
   try {
-    // using .populate() because the "creator" property ( from other collections ) will be modified ( see line 157 )
+    // using .populate() because the "creator" property ( from other collections ) will be modified
     recipeToDelete = await Recipe.findById(recipeToDeleteId).populate(
       "creator"
     );
-    console.log(recipeToDelete);
   } catch (error) {
     console.log(error);
     return next(new HttpError("Deleting recipe failed", 500));
@@ -149,6 +179,12 @@ const deleteRecipe = async (req, res, next) => {
 
   if (!recipeToDelete) {
     return next(new HttpError("Could not find recipe for this id", 404));
+  }
+
+  if (recipeToDelete.creator._id.toString() !== req.userData.userId) {
+    return next(
+      new HttpError("You are not allowed to delete this recipe", 401)
+    );
   }
 
   try {
@@ -176,3 +212,4 @@ exports.createRecipe = createRecipe;
 exports.getAllRecipes = getAllRecipes;
 exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
+exports.getRecipeDetails = getRecipeDetails;
