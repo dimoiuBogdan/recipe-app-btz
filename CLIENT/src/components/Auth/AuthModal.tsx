@@ -1,11 +1,18 @@
-import { FC } from "react";
+import { FC, useContext, useEffect } from "react";
 import ActiveLink from "../ActiveLink/ActiveLink";
 import { AUTH } from "../../constants/routes";
+import { AuthContext } from "../../redux/AuthContext";
 
 type AuthModalProps = {
   children: any;
 };
 const AuthModal: FC<AuthModalProps> = ({ children }) => {
+  const { logoutUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    logoutUser();
+  }, [logoutUser]);
+
   const activeLinkClassName = "text-orange-600";
 
   return (

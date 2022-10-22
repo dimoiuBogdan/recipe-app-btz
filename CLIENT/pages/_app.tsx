@@ -8,44 +8,22 @@ import useLocalStorage from "../src/hooks/useLocalStorage";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AuthContext } from "../src/redux/AuthContext";
+import useAuth from "../src/hooks/useAuth";
 
+let logoutTimer: string | number | NodeJS.Timeout | undefined;
 type MyAppProps = {
   protected: boolean;
 };
 function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
   const router = useRouter();
-  const { getItem, removeItem } = useLocalStorage();
-  const [token, setToken] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
-
-  const autoLoginUser = useCallback(() => {
-    const btzToken = getItem("btz-token");
-
-    const userData =
-      btzToken !== null
-        ? (JSON.parse(btzToken) as {
-            token: string;
-            userId: string;
-          })
-        : {
-            token: "",
-            userId: "",
-          };
-
-    if (userData.token) {
-      setToken(userData.token);
-    }
-
-    if (userData.userId) {
-      setUserId(userData.userId);
-    }
-  }, [getItem]);
-
-  const logoutUser = useCallback(() => {
-    removeItem("btz-token");
-    setToken("");
-    setUserId("");
-  }, [removeItem]);
+  const {
+    autoLoginUser,
+    logoutUser,
+    token,
+    tokenExpirationDate,
+    userId,
+    manageTokenExpiration,
+  } = useAuth();
 
   useEffect(() => {
     autoLoginUser();
@@ -55,10 +33,16 @@ function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
     }
   }, [autoLoginUser, pageProps, router, token, userId]);
 
+  useEffect(() => {
+    manageTokenExpiration();
+  }, [manageTokenExpiration]);
+
   return (
     <div className="bg-orange-200 bg-opacity-40">
       <div className="mx-auto bg-orange-50 bg-opacity-50 max-w-screen-md min-h-screen h-full shadow-lg p-4 pb-16">
-        <AuthContext.Provider value={{ token, userId, logoutUser }}>
+        <AuthContext.Provider
+          value={{ token, userId, tokenExpirationDate, logoutUser }}
+        >
           <Provider store={store}>
             <NotificationPopup />
             <Navbar />

@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { SchemaOf } from "yup";
 import { getSubmitButtonLabel } from "../../../services/AuthService";
@@ -12,17 +12,18 @@ import { useRouter } from "next/router";
 import { OVERVIEW_PAGE_ROUTE } from "../../../constants/routes";
 import useAxiosRequest from "../../../hooks/useAxiosRequest";
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import { AuthContext } from "../../../redux/AuthContext";
 
 type FormProperties = {
   email: string;
   password: string;
 };
-
 const LoginForm: FC<any> = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { setItem } = useLocalStorage();
   const { axiosRequest } = useAxiosRequest();
+  const { tokenExpirationDate: expiration } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -35,6 +36,12 @@ const LoginForm: FC<any> = () => {
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string().required("Required"),
   });
+
+  const getTokenExpirationDate = () => {
+    const presentDate = new Date().getDate();
+
+    return expiration || new Date().setDate(presentDate + 7);
+  };
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -53,8 +60,13 @@ const LoginForm: FC<any> = () => {
 
     const successAction = (res: AxiosResponse) => {
       const { userId, token } = res.data as { userId: string; token: string };
+      const tokenExpirationDate = getTokenExpirationDate();
 
-      setItem("btz-token", { token, userId });
+      setItem("btz-token", {
+        token,
+        userId,
+        tokenExpirationDate,
+      });
 
       dispatch(
         NotificationActions.setPopupProperties({
