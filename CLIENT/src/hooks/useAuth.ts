@@ -5,8 +5,8 @@ let logoutTimer: string | number | NodeJS.Timeout | undefined;
 
 const useAuth = () => {
     const { getItem, removeItem } = useLocalStorage();
-    const [token, setToken] = useState<string>("");
-    const [userId, setUserId] = useState<string>("");
+    const [token, setToken] = useState<string | undefined>(undefined);
+    const [userId, setUserId] = useState<string | undefined>(undefined);
     const [tokenExpirationDate, setTokenExpirationDate] = useState<
         Date | undefined
     >(undefined);
@@ -34,11 +34,9 @@ const useAuth = () => {
                     tokenExpirationDate: undefined,
                 };
 
-        if (userData.token && userData.userId && userData.tokenExpirationDate) {
-            setToken(userData.token);
-            setUserId(userData.userId);
-            setTokenExpirationDate(userData.tokenExpirationDate);
-        }
+        setToken(userData.token || "");
+        setUserId(userData.userId || "");
+        setTokenExpirationDate(userData.tokenExpirationDate || new Date());
 
         if (
             userData.tokenExpirationDate &&
@@ -48,16 +46,15 @@ const useAuth = () => {
         }
     }, [getItem, logoutUser]);
 
-    const manageTokenExpiration = useCallback(
-        () => {
-            if (token && tokenExpirationDate) {
-                const remainingTime =
-                    new Date(tokenExpirationDate).getTime() - new Date().getTime();
-                logoutTimer = setTimeout(logoutUser, remainingTime);
-            } else {
-                clearTimeout(logoutTimer);
-            }
-        }, [logoutUser, token, tokenExpirationDate])
+    const manageTokenExpiration = useCallback(() => {
+        if (token && tokenExpirationDate) {
+            const remainingTime =
+                new Date(tokenExpirationDate).getTime() - new Date().getTime();
+            logoutTimer = setTimeout(logoutUser, remainingTime);
+        } else {
+            clearTimeout(logoutTimer);
+        }
+    }, [logoutUser, token, tokenExpirationDate])
 
 
     return {
