@@ -8,25 +8,21 @@ import {
   RecipeDetailsStepsModel,
   RecipeFilterTypes,
 } from "../src/models/RecipeModels";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AxiosError, AxiosResponse } from "axios";
 import useAxiosRequest from "../src/hooks/useAxiosRequest";
 import { NotificationActions } from "../src/redux/reducers/notificationReducer";
 import { NotificationTypes } from "../src/models/NotificationModel";
 import { getSubmitButtonLabel } from "../src/services/AuthService";
-import { RootState } from "../src/redux/reducers/reducers";
 import Ingredients from "../src/components/NewRecipe/Ingredients";
 import { v4 } from "uuid";
 import Steps from "../src/components/NewRecipe/Steps";
-import { AuthContext } from "../src/redux/AuthContext";
 
 const NewRecipePage: NextPage = () => {
   const dispatch = useDispatch();
   const { axiosRequest } = useAxiosRequest();
-  const { userId } = useContext(AuthContext);
 
   const formProperties: NewRecipeModel = {
-    creator: userId || undefined,
     image:
       "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=09f17a6d679b013e15f0980f59ed1b295961ccd59bd9bcd7ac0b14dd11590f4a&ipo=images",
     ingredients: [{ id: v4(), quantity: "", title: "" }],
@@ -52,7 +48,6 @@ const NewRecipePage: NextPage = () => {
 
   const NewRecipeSchema: Yup.SchemaOf<NewRecipeModel> = Yup.object().shape({
     image: Yup.string().required("Required"),
-    creator: Yup.string().required("Required"),
     recipeName: Yup.string().required("Required"),
     ingredients: Yup.array().of(IngredientsSchema).min(1).required("Required"),
     type: Yup.mixed()
@@ -66,11 +61,9 @@ const NewRecipePage: NextPage = () => {
     values: NewRecipeModel,
     setSubmitting: (state: boolean) => void
   ) => {
-    const { creator, image, recipeName, duration, ingredients, type, steps } =
-      values;
+    const { image, recipeName, duration, ingredients, type, steps } = values;
 
     const data = {
-      creator,
       image,
       ingredients,
       steps,

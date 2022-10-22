@@ -53,7 +53,6 @@ export type RecipeDetailsStepsModel = {
 }
 
 export type NewRecipeModel = {
-    creator: string | undefined;
     recipeName: string;
     ingredients: RecipeDetailsIngredientsModel[];
     steps: RecipeDetailsStepsModel[];
