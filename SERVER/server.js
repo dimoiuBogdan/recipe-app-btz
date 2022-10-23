@@ -33,6 +33,7 @@ app.use((req, res, next) => {
 // this will be applied on every incoming request
 app.use((error, req, res, next) => {
   if (res.headersSent) {
+    console.log(error);
     return next(new HttpError(error, 500));
   }
 
