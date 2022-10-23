@@ -15,10 +15,12 @@ const UserImage: FC<UserImageProps> = ({ image, username }) => {
   };
 
   return (
-    <div className="h-14 w-14 relative overflow-hidden cursor-pointer rounded-full shadow-md">
+    <div
+      onClick={redirectToProfile}
+      className="h-14 w-14 relative overflow-hidden cursor-pointer rounded-full shadow-md"
+    >
       {image ? (
         <Image
-          onClick={redirectToProfile}
           src={image}
           layout="fill"
           alt="profile_image"
