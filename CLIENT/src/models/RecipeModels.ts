@@ -1,3 +1,14 @@
+export type RecipeModel = {
+    creator: string;
+    creatorUsername: string;
+    type: RecipeFilterTypes;
+    duration: string;
+    recipeName: string;
+    ingredients: RecipeDetailsIngredientsModel;
+    steps: RecipeDetailsStepsModel;
+    image: string;
+}
+
 export type TopRatedRecipeModel = {
     id: string;
     likes: number;

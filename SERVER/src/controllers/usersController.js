@@ -119,12 +119,27 @@ const getUsers = async (req, res, next) => {
     users = await User.find({}, "-password"); // return every users ( w/o password property)
   } catch (error) {
     console.log(error);
-    return next(new HttpError("Could not find any user"), 500);
+    return next(new HttpError("Could not find any user"), 404);
   }
 
   res.json({ users });
 };
 
+const getUserById = async (req, res, next) => {
+  const userId = req.params.uid;
+
+  let user;
+  try {
+    user = await User.findById(userId, "-password"); // return every users ( w/o password property)
+  } catch (error) {
+    console.log(error);
+    return next(new HttpError("Could not find a user for that id"), 404);
+  }
+
+  return res.json({ user });
+};
+
 exports.register = register;
 exports.login = login;
 exports.getUsers = getUsers;
+exports.getUserById = getUserById;
