@@ -9,19 +9,16 @@ import { UserModel } from "../../models/UserModels";
 import { AuthContext } from "../../redux/AuthContext";
 import { NotificationActions } from "../../redux/reducers/notificationReducer";
 import PlaceholderProfileImage from "../../resources/images/profile_image_placeholder.png";
+import UserImage from "../UserImage/UserImage";
+import InitialsProfileImage from "./InitialsProfileImage";
 
 const OverviewHeader = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const { axiosRequest } = useAxiosRequest();
   const { userId } = useContext(AuthContext);
   const [currentUserDetails, setCurrentUserDetails] = useState<
     UserModel | undefined
   >(undefined);
-
-  const redirectToProfile = () => {
-    router.push("/profile");
-  };
 
   const getUserDetails = () => {
     const successAction = (res: AxiosResponse) => {
@@ -64,13 +61,9 @@ const OverviewHeader = () => {
         <div className="text-sm text-zinc-600 font-medium">Good afternoon,</div>
         <div className="font-medium text-xl">{currentUserDetails.username}</div>
       </div>
-      <Image
-        onClick={redirectToProfile}
-        className="rounded-full shadow-md overflow-hidden cursor-pointer"
-        src={currentUserDetails.image || PlaceholderProfileImage}
-        width="60"
-        height="60"
-        alt="profile_image"
+      <UserImage
+        image={currentUserDetails.image}
+        username={currentUserDetails.username}
       />
     </div>
   );
