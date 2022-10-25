@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { RecipeDetailsStepsModel } from "../../models/RecipeModels";
+import { RecipeStepsModel } from "../../models/RecipeModels";
 import { MAX_STEPTS_LENGTH, STEPS } from "../../services/RecipeStepsService";
 
 type RecipePreparationProps = {
-  steps: RecipeDetailsStepsModel[];
+  steps: RecipeStepsModel[];
 };
 const RecipePreparation: FC<RecipePreparationProps> = ({ steps }) => {
   const getContent = () => {

@@ -2,10 +2,7 @@ import { ErrorMessage, Field, useFormikContext } from "formik";
 import React, { FC } from "react";
 import { FaPlusSquare, FaTrash } from "react-icons/fa";
 import { v4 } from "uuid";
-import {
-  NewRecipeModel,
-  RecipeDetailsStepsModel,
-} from "../../models/RecipeModels";
+import { NewRecipeModel, RecipeStepsModel } from "../../models/RecipeModels";
 
 const Steps = () => {
   const {
@@ -20,7 +17,7 @@ const Steps = () => {
     );
   };
 
-  const addStepField = (steps: RecipeDetailsStepsModel[]) => {
+  const addStepField = (steps: RecipeStepsModel[]) => {
     setFieldValue("steps", [
       ...steps,
       {

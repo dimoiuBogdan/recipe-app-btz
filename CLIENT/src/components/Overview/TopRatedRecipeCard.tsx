@@ -1,15 +1,15 @@
 import Image from "next/image";
 import { FC } from "react";
 import { FaRegClock, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
-import { TopRatedRecipe } from "../../models/RecipeModels";
+import { TopRatedRecipeModel } from "../../models/RecipeModels";
 
-const TopRatedRecipeCard: FC<TopRatedRecipe> = ({
-  id,
+const TopRatedRecipeCard: FC<TopRatedRecipeModel> = ({
+  _id,
   likes,
-  title,
   image,
   creator,
   duration,
+  recipeName,
 }) => {
   const redirectToRecipe = () => {
     return;
@@ -24,7 +24,7 @@ const TopRatedRecipeCard: FC<TopRatedRecipe> = ({
       className="w-full bg-cover bg-center relative rounded-md shadow-md h-80 overflow-hidden text-white p-2 flex flex-col justify-end"
     >
       <div className="z-10">
-        <div className="font-medium text-lg">{title}</div>
+        <div className="font-medium text-lg">{recipeName}</div>
         <div className="flex items-center text-zinc-100 text-sm font-medium">
           <div className="pr-3 flex items-center">
             <FaRegClock className="mr-1" />

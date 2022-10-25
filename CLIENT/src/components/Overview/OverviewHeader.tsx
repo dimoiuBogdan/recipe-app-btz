@@ -1,18 +1,16 @@
 import { AxiosError, AxiosResponse } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useAxiosRequest from "../../hooks/useAxiosRequest";
 import { NotificationTypes } from "../../models/NotificationModel";
 import { UserModel } from "../../models/UserModels";
 import { AuthContext } from "../../redux/AuthContext";
 import { NotificationActions } from "../../redux/reducers/notificationReducer";
-import PlaceholderProfileImage from "../../resources/images/profile_image_placeholder.png";
 import UserImage from "../UserImage/UserImage";
-import InitialsProfileImage from "./InitialsProfileImage";
 
-const OverviewHeader = () => {
+const OverviewHeader: FC<any> = () => {
   const dispatch = useDispatch();
   const { axiosRequest } = useAxiosRequest();
   const { userId } = useContext(AuthContext);
@@ -52,7 +50,7 @@ const OverviewHeader = () => {
   }, [userId]);
 
   if (!currentUserDetails || !userId) {
-    return;
+    return null;
   }
 
   return (
