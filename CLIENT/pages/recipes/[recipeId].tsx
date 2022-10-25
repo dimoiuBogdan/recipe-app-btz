@@ -14,47 +14,56 @@ const RecipePage = () => {
   const { recipeId } = router.query as { recipeId: string };
   const { axiosRequest } = useAxiosRequest();
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailsModel>({
-    description: "",
-    duration: "",
+    likes: 0,
     image: "",
-    ingredients: [],
-    nutrients: [],
-    steps: [],
     creator: "",
-    creatorUsername: "",
+    duration: "",
     recipeName: "",
+    description: "",
+    creatorUsername: "",
     type: RecipeType.Breakfast,
+    steps: [],
+    nutrients: [],
+    ingredients: [],
   });
 
-  const successAction = (res: AxiosResponse) => {
-    const {
-      data: { recipeDetails },
-    } = res;
+  const getRecipeDetails = () => {
+    const successAction = (res: AxiosResponse) => {
+      const {
+        data: { recipeDetails },
+      } = res;
 
-    setRecipeDetails(recipeDetails);
-  };
+      setRecipeDetails(recipeDetails);
+    };
 
-  const errorAction = (err: AxiosError) => {
-    console.log(err);
+    const errorAction = (err: AxiosError) => {
+      console.log(err);
+    };
+
+    axiosRequest(
+      "get",
+      `http://localhost:5000/api/recipes/${recipeId}/details`,
+      {},
+      successAction,
+      errorAction
+    );
   };
 
   useEffect(() => {
     if (recipeId) {
-      axiosRequest(
-        "get",
-        `http://localhost:5000/api/recipes/${recipeId}/details`,
-        {},
-        successAction,
-        errorAction
-      );
+      getRecipeDetails();
     }
   }, [recipeId]);
 
   return (
     <div>
-      <Navbar creatorId={recipeDetails.creator} recipeId={recipeId} />
+      <Navbar
+        recipeId={recipeId}
+        creatorId={recipeDetails.creator}
+        getRecipeDetails={getRecipeDetails}
+      />
       <RecipeDetails
-        type={recipeDetails.type}
+        likes={recipeDetails.likes}
         image={recipeDetails.image}
         duration={recipeDetails.duration}
         recipeName={recipeDetails.recipeName}

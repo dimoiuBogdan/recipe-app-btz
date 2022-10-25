@@ -100,6 +100,7 @@ const createRecipe = async (req, res, next) => {
     steps,
     type,
     duration,
+    likes: 0,
   });
 
   let user;
@@ -208,6 +209,34 @@ const deleteRecipe = async (req, res, next) => {
   });
 };
 
+const incrementRecipeLike = async (req, res, next) => {
+  const recipeId = req.params.rid;
+
+  let recipeToLike;
+  try {
+    recipeToLike = await Recipe.findById(recipeId);
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError("Could not find recipe for the provided id", 404)
+    );
+  }
+
+  recipeToLike.likes++;
+
+  try {
+    await recipeToLike.save();
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError("Something went wrong. Could not like recipe"),
+      500
+    );
+  }
+
+  res.status(200).json({ recipeToLike });
+};
+
 exports.getRecipeById = getRecipeById;
 exports.getRecipesByUserId = getRecipesByUserId;
 exports.createRecipe = createRecipe;
@@ -215,3 +244,4 @@ exports.getAllRecipes = getAllRecipes;
 exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
 exports.getRecipeDetails = getRecipeDetails;
+exports.incrementRecipeLike = incrementRecipeLike;

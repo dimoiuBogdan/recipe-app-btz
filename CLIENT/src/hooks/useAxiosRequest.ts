@@ -1,18 +1,15 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthState } from "../models/AuthModel";
 import { NotificationTypes } from "../models/NotificationModel";
 import { AuthContext } from "../redux/AuthContext";
 import { LoadingActions } from "../redux/reducers/loadingReducer";
 import { NotificationActions } from "../redux/reducers/notificationReducer";
-import { RootState } from "../redux/reducers/reducers";
 
 const useAxiosRequest = () => {
     const dispatch = useDispatch();
     const { token } = useContext(AuthContext);
     const activeHttpRequests = useRef<AbortController[]>([]);
-
 
     useEffect(() => {
         return () => {
@@ -28,7 +25,7 @@ const useAxiosRequest = () => {
         activeHttpRequests.current = activeHttpRequests.current.filter(controller => controller !== currentController)
     }
 
-    const axiosRequest = useCallback((
+    const axiosRequest = (
         method: 'post' | 'get' | 'delete' | 'patch',
         url: string, data: any,
         successAction: (res: AxiosResponse<any, any>) => void,
@@ -39,6 +36,8 @@ const useAxiosRequest = () => {
 
         const httpAbortController = new AbortController();
         activeHttpRequests.current.push(httpAbortController)
+
+        console.log(token, '1')
 
         axios({
             method,
@@ -61,8 +60,7 @@ const useAxiosRequest = () => {
                 errorAction(err);
             })
             .finally(() => { dispatch(LoadingActions.setLoading(false)); finallyAction && finallyAction() })
-    }, [])
-
+    }
 
     return {
         axiosRequest

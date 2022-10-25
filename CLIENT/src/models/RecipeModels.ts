@@ -17,7 +17,7 @@ export type TopRatedRecipeModel = Pick<RecipeModel, '_id' | 'likes' | 'recipeNam
 
 export type AllRecipeModel = Pick<RecipeModel, "_id" | "creator" | "image" | "creatorUsername" | "duration" | "recipeName" | "type">
 
-export type RecipeDetailsModel = Pick<RecipeModel, "creator" | "creatorUsername" | "type" | "duration" | "recipeName" | "ingredients" | "steps" | "image" | "description" | "nutrients">
+export type RecipeDetailsModel = Pick<RecipeModel, "creator" | "creatorUsername" | "type" | "duration" | "recipeName" | "ingredients" | "steps" | "image" | "description" | "nutrients" | "likes">
 
 export type NewRecipeModel = {
     image: string;
