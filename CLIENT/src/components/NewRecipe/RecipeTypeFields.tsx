@@ -1,6 +1,6 @@
 import { Field, ErrorMessage } from "formik";
 import React from "react";
-import { RecipeFilterTypes } from "../../models/RecipeModels";
+import { RecipeType } from "../../models/RecipeModels";
 
 const RecipeTypeFields = () => {
   return (
@@ -16,10 +16,10 @@ const RecipeTypeFields = () => {
         <option disabled value={undefined}>
           Recipe type...
         </option>
-        <option value={RecipeFilterTypes.Breakfast}>Breakfast</option>
-        <option value={RecipeFilterTypes.Lunch}>Lunch</option>
-        <option value={RecipeFilterTypes.Snack}>Snack</option>
-        <option value={RecipeFilterTypes.Dinner}>Dinner</option>
+        <option value={RecipeType.Breakfast}>Breakfast</option>
+        <option value={RecipeType.Lunch}>Lunch</option>
+        <option value={RecipeType.Snack}>Snack</option>
+        <option value={RecipeType.Dinner}>Dinner</option>
       </Field>
       <ErrorMessage
         component="div"

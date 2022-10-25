@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { RecipeDetailsIngredientsModel } from "../../models/RecipeModels";
+import { RecipeIngredientsModel } from "../../models/RecipeModels";
 
 type RecipeIngredientsProps = {
-  ingredients: RecipeDetailsIngredientsModel[];
+  ingredients: RecipeIngredientsModel[];
 };
 const RecipeIngredients: FC<RecipeIngredientsProps> = ({ ingredients }) => {
   const getContent = () => {

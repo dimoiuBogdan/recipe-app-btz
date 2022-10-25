@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import * as Yup from "yup";
 import React from "react";
-import { NewRecipeModel, RecipeFilterTypes } from "../src/models/RecipeModels";
+import { NewRecipeModel, RecipeType } from "../src/models/RecipeModels";
 import { useDispatch } from "react-redux";
 import { AxiosError, AxiosResponse } from "axios";
 import useAxiosRequest from "../src/hooks/useAxiosRequest";

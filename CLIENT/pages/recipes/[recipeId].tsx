@@ -7,10 +7,7 @@ import RecipeIngredients from "../../src/components/Recipe/RecipeIngredients";
 import RecipeNutrients from "../../src/components/Recipe/RecipeNutrients";
 import RecipePreparation from "../../src/components/Recipe/RecipePreparation";
 import useAxiosRequest from "../../src/hooks/useAxiosRequest";
-import {
-  RecipeDetailsModel,
-  RecipeFilterTypes,
-} from "../../src/models/RecipeModels";
+import { RecipeDetailsModel, RecipeType } from "../../src/models/RecipeModels";
 
 const RecipePage = () => {
   const router = useRouter();
@@ -26,7 +23,7 @@ const RecipePage = () => {
     creator: "",
     creatorUsername: "",
     recipeName: "",
-    type: RecipeFilterTypes.Breakfast,
+    type: RecipeType.Breakfast,
   });
 
   const successAction = (res: AxiosResponse) => {

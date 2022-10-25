@@ -5,10 +5,7 @@ import React, {
   SetStateAction,
   useEffect,
 } from "react";
-import {
-  RecipeFiltersModel,
-  RecipeFilterTypes,
-} from "../../models/RecipeModels";
+import { RecipeFiltersModel, RecipeType } from "../../models/RecipeModels";
 
 const AllRecipesFilters = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
@@ -16,19 +13,19 @@ const AllRecipesFilters = () => {
   const recipesFilters: RecipeFiltersModel[] = [
     {
       content: "Breakfast🍳",
-      filterId: RecipeFilterTypes.Breakfast,
+      filterId: RecipeType.Breakfast,
     },
     {
       content: "Lunch🍕",
-      filterId: RecipeFilterTypes.Lunch,
+      filterId: RecipeType.Lunch,
     },
     {
       content: "Snack🥪",
-      filterId: RecipeFilterTypes.Snack,
+      filterId: RecipeType.Snack,
     },
     {
       content: "Dinner🥘",
-      filterId: RecipeFilterTypes.Dinner,
+      filterId: RecipeType.Dinner,
     },
   ];
 

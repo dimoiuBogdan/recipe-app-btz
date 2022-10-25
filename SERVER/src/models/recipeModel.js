@@ -54,6 +54,10 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+  likes: {
+    type: Number,
+    requied: true,
+  },
 });
 
 module.exports = mongoose.model("Recipe", recipeSchema);

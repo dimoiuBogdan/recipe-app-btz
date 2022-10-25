@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { FaPlusSquare, FaTrash } from "react-icons/fa";
 import {
   NewRecipeModel,
-  RecipeDetailsIngredientsModel,
+  RecipeIngredientsModel,
 } from "../../models/RecipeModels";
 import { v4 } from "uuid";
 
@@ -20,7 +20,7 @@ const Ingredients: FC = () => {
     );
   };
 
-  const addIngredientField = (ingredients: RecipeDetailsIngredientsModel[]) => {
+  const addIngredientField = (ingredients: RecipeIngredientsModel[]) => {
     setFieldValue("ingredients", [
       ...ingredients,
       {
