@@ -37,8 +37,6 @@ const useAxiosRequest = () => {
         const httpAbortController = new AbortController();
         activeHttpRequests.current.push(httpAbortController)
 
-        console.log(token, '1')
-
         axios({
             method,
             headers: {

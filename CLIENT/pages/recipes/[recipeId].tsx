@@ -14,7 +14,10 @@ const RecipePage = () => {
   const { recipeId } = router.query as { recipeId: string };
   const { axiosRequest } = useAxiosRequest();
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailsModel>({
-    likes: 0,
+    likes: {
+      number: 0,
+      persons: [],
+    },
     image: "",
     creator: "",
     duration: "",
@@ -60,6 +63,7 @@ const RecipePage = () => {
       <Navbar
         recipeId={recipeId}
         creatorId={recipeDetails.creator}
+        personsWhoLiked={recipeDetails.likes.persons}
         getRecipeDetails={getRecipeDetails}
       />
       <RecipeDetails

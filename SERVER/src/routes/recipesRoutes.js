@@ -17,7 +17,7 @@ router.get("/:rid", recipesController.getRecipeById);
 
 router.use(checkAuth); // routes underneath will need authorization
 
-router.post("/like/:rid", recipesController.incrementRecipeLike);
+router.post("/like/:rid", recipesController.likeRecipe);
 
 router.post("/", createRecipeValidation, recipesController.createRecipe);
 

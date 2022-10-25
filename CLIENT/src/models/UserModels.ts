@@ -1,9 +1,11 @@
 import { RecipeModel } from "./RecipeModels";
 
 export type UserModel = {
-    username: string;
+    _id: string;
     email: string;
-    recipes: RecipeModel;
-    registeredOn: Date;
     image: string;
+    username: string;
+    registeredOn: Date;
+    recipes: RecipeModel;
+    likedRecipes: string[]
 }

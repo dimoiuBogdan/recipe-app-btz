@@ -1,10 +1,10 @@
 export type RecipeModel = {
     _id: string;
-    likes: number;
     image: string;
     creator: string;
     type: RecipeType;
     duration: string;
+    likes: LikesModel;
     recipeName: string;
     description: string;
     creatorUsername: string;
@@ -50,6 +50,11 @@ export type RecipeNutrientsModel = {
 export type RecipeStepsModel = {
     id: string;
     description: string;
+}
+
+export type LikesModel = {
+    number: number;
+    persons: string[];
 }
 
 export enum RecipeType {

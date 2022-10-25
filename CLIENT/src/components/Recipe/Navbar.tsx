@@ -6,9 +6,15 @@ import ActionBar from "./ActionBar";
 type NavbarProps = {
   recipeId: string;
   creatorId: string;
+  personsWhoLiked: string[];
   getRecipeDetails: () => void;
 };
-const Navbar: FC<NavbarProps> = ({ creatorId, recipeId, getRecipeDetails }) => {
+const Navbar: FC<NavbarProps> = ({
+  recipeId,
+  creatorId,
+  personsWhoLiked,
+  getRecipeDetails,
+}) => {
   const router = useRouter();
   const ref = useRef<any>(null);
   const [isShown, setIsShown] = useState<boolean>(false);
@@ -46,6 +52,7 @@ const Navbar: FC<NavbarProps> = ({ creatorId, recipeId, getRecipeDetails }) => {
           isShown={isShown}
           recipeId={recipeId}
           creatorId={creatorId}
+          personsWhoLiked={personsWhoLiked}
           getRecipeDetails={getRecipeDetails}
         />
       </div>

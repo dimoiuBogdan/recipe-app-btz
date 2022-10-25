@@ -100,7 +100,10 @@ const createRecipe = async (req, res, next) => {
     steps,
     type,
     duration,
-    likes: 0,
+    likes: {
+      number: 0,
+      persons: [],
+    },
   });
 
   let user;
@@ -209,7 +212,7 @@ const deleteRecipe = async (req, res, next) => {
   });
 };
 
-const incrementRecipeLike = async (req, res, next) => {
+const likeRecipe = async (req, res, next) => {
   const recipeId = req.params.rid;
 
   let recipeToLike;
@@ -222,7 +225,46 @@ const incrementRecipeLike = async (req, res, next) => {
     );
   }
 
-  recipeToLike.likes++;
+  const personWhoLikedId = req.userData.userId;
+  const personWhoLiked = await User.findById(personWhoLikedId).populate(
+    "likedRecipes"
+  );
+
+  if (!personWhoLiked.likedRecipes.includes(recipeId)) {
+    try {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      recipeToLike.likes.number++;
+      recipeToLike.likes.persons.push(personWhoLikedId);
+
+      personWhoLiked.likedRecipes.push(recipeId);
+      await personWhoLiked.save({ session });
+
+      session.commitTransaction();
+    } catch (error) {
+      console.log(error);
+      return next(new HttpError("Liking recipe failed", 500));
+    }
+  } else {
+    try {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      recipeToLike.likes.number--;
+      recipeToLike.likes.persons = recipeToLike.likes.persons.filter(
+        (pers) => pers.toString() !== personWhoLikedId
+      );
+
+      personWhoLiked.likedRecipes.pull(recipeId);
+      await personWhoLiked.save({ session });
+
+      session.commitTransaction();
+    } catch (error) {
+      console.log(error);
+      return next(new HttpError("Unliking recipe failed", 500));
+    }
+  }
 
   try {
     await recipeToLike.save();
@@ -244,4 +286,4 @@ exports.getAllRecipes = getAllRecipes;
 exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
 exports.getRecipeDetails = getRecipeDetails;
-exports.incrementRecipeLike = incrementRecipeLike;
+exports.likeRecipe = likeRecipe;

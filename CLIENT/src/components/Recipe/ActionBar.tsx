@@ -11,12 +11,14 @@ type ActionBarProps = {
   recipeId: string;
   isShown: boolean;
   creatorId: string;
+  personsWhoLiked: string[];
   getRecipeDetails: () => void;
 };
 const ActionBar: FC<ActionBarProps> = ({
   isShown,
   recipeId,
   creatorId,
+  personsWhoLiked,
   getRecipeDetails,
 }) => {
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ const ActionBar: FC<ActionBarProps> = ({
   const { userId } = useContext(AuthContext);
 
   const recipeBelongsToConnectedUser = creatorId && userId === creatorId;
+  const recipeAlreadyLiked = personsWhoLiked.includes(creatorId);
 
   const deleteRecipe = () => {
     axiosRequest(
@@ -62,18 +65,20 @@ const ActionBar: FC<ActionBarProps> = ({
 
       dispatch(
         NotificationActions.setPopupProperties({
-          content: "Recipe liked.",
+          content: recipeAlreadyLiked ? "Recipe unliked." : "Recipe liked.",
           type: NotificationTypes.Success,
         })
       );
     };
 
     const errorAction = (err: AxiosError) => {
-      console.log(err);
+      console.log(err.message);
 
       dispatch(
         NotificationActions.setPopupProperties({
-          content: "Could not like recipe.",
+          content: recipeAlreadyLiked
+            ? "Unliking recipe failed."
+            : "Liking recipe failed.",
           type: NotificationTypes.Error,
         })
       );
@@ -94,7 +99,10 @@ const ActionBar: FC<ActionBarProps> = ({
 
   return (
     <div className="absolute top-6 overflow-hidden shadow-md w-44 rounded-lg text-base">
-      <ActionBarElement action={likeRecipe} text="Like" />
+      <ActionBarElement
+        action={likeRecipe}
+        text={recipeAlreadyLiked ? "Unlike" : "Like"}
+      />
       <ActionBarElement
         action={() => {
           console.log("1");

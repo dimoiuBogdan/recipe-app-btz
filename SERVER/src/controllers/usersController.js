@@ -42,8 +42,9 @@ const register = async (req, res, next) => {
     email,
     username,
     password: hashedPassword,
-    recipes: [],
     registeredOn: new Date(),
+    recipes: [],
+    likedRecipes: [],
   });
 
   try {

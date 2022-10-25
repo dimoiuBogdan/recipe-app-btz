@@ -25,7 +25,7 @@ const RecipeDetails: FC<
       <div className="text-sm text-zinc-500 flex justify-center">
         by {creatorUsername} -
         <span className="flex items-center ml-1">
-          {likes}
+          {likes.number}
           <FaRegThumbsUp className="text-xs ml-1" />
         </span>
       </div>
