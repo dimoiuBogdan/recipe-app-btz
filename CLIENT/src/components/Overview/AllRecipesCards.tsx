@@ -12,41 +12,13 @@ import { NotificationActions } from "../../redux/reducers/notificationReducer";
 import { RootState } from "../../redux/reducers/reducers";
 import Loading from "../Loading/Loading";
 
-const AllRecipesCards: FC<any> = () => {
-  const { axiosRequest } = useAxiosRequest();
-  const dispatch = useDispatch();
-
-  const [allRecipes, setAllRecipes] = useState<AllRecipeModel[]>([]);
+type AllRecipesCardsProps = {
+  allRecipes: AllRecipeModel[];
+};
+const AllRecipesCards: FC<AllRecipesCardsProps> = ({ allRecipes }) => {
   const loading = useSelector<RootState, boolean>(
     (s) => s.loadingReducer.loadingState
   );
-
-  const successAction = (res: AxiosResponse) => {
-    const { recipes } = res.data as { recipes: AllRecipeModel[] };
-
-    setAllRecipes(recipes);
-  };
-
-  const errorAction = (err: AxiosError) => {
-    console.log(err);
-
-    dispatch(
-      NotificationActions.setPopupProperties({
-        content: "Something went wrong retrieving all recipes",
-        type: NotificationTypes.Error,
-      })
-    );
-  };
-
-  useEffect(() => {
-    axiosRequest(
-      "get",
-      "http://localhost:5000/api/recipes",
-      {},
-      successAction,
-      errorAction
-    );
-  }, []);
 
   const getAllRecipesContent = () => {
     return allRecipes?.map((recipe) => {

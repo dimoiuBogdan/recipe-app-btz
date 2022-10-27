@@ -11,6 +11,8 @@ router.get("/", recipesController.getAllRecipes);
 
 router.get("/top-rated", recipesController.getTopRatedRecipes);
 
+router.post("/filtered-recipes", recipesController.getFilteredRecipes);
+
 router.get("/:rid/details", recipesController.getRecipeDetails);
 
 router.get("/user/:uid", recipesController.getRecipesByUserId);

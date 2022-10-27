@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from "axios";
 import React, {
   FC,
   useState,
@@ -5,9 +6,18 @@ import React, {
   SetStateAction,
   useEffect,
 } from "react";
-import { RecipeFiltersModel, RecipeType } from "../../models/RecipeModels";
+import useAxiosRequest from "../../hooks/useAxiosRequest";
+import {
+  AllRecipeModel,
+  RecipeFiltersModel,
+  RecipeType,
+} from "../../models/RecipeModels";
 
-const AllRecipesFilters = () => {
+type AllRecipesFiltersProps = {
+  setAllRecipes: Dispatch<SetStateAction<AllRecipeModel[]>>;
+};
+const AllRecipesFilters: FC<AllRecipesFiltersProps> = ({ setAllRecipes }) => {
+  const { axiosRequest } = useAxiosRequest();
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
   const recipesFilters: RecipeFiltersModel[] = [
@@ -46,9 +56,34 @@ const AllRecipesFilters = () => {
   };
 
   const filterRecipes = () => {
+    const successAction = (res: AxiosResponse) => {
+      const { recipes } = res.data as { recipes: AllRecipeModel[] };
+
+      setAllRecipes(recipes);
+    };
+
+    const errorAction = (err: AxiosError) => {
+      console.log(err);
+    };
+
     if (selectedFilter) {
-      // a get request will be made to the paginated recipes endpoint
-      console.log("request");
+      axiosRequest(
+        "post",
+        "http://localhost:5000/api/recipes/filtered-recipes",
+        {
+          filter: selectedFilter,
+        },
+        successAction,
+        errorAction
+      );
+    } else {
+      axiosRequest(
+        "get",
+        "http://localhost:5000/api/recipes",
+        {},
+        successAction,
+        errorAction
+      );
     }
   };
 
