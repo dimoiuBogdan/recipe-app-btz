@@ -1,10 +1,10 @@
 export type RecipeModel = {
     _id: string;
-    likes: number;
     image: string;
     creator: string;
     type: RecipeType;
     duration: string;
+    likes: LikesModel;
     recipeName: string;
     description: string;
     creatorUsername: string;
@@ -13,16 +13,16 @@ export type RecipeModel = {
     ingredients: RecipeIngredientsModel[];
 }
 
-export type TopRatedRecipeModel = Pick<RecipeModel, '_id' | 'likes' | 'recipeName' | 'image' | 'creator' | 'duration'>
+export type TopRatedRecipeModel = Pick<RecipeModel, '_id' | 'likes' | 'recipeName' | 'image' | 'creatorUsername' | 'duration'>
 
 export type AllRecipeModel = Pick<RecipeModel, "_id" | "creator" | "image" | "creatorUsername" | "duration" | "recipeName" | "type">
 
-export type RecipeDetailsModel = Pick<RecipeModel, "creator" | "creatorUsername" | "type" | "duration" | "recipeName" | "ingredients" | "steps" | "image" | "description" | "nutrients">
+export type RecipeDetailsModel = Pick<RecipeModel, "creator" | "creatorUsername" | "type" | "duration" | "recipeName" | "ingredients" | "steps" | "image" | "description" | "nutrients" | "likes">
 
 export type NewRecipeModel = {
     image: string;
-    type: RecipeType;
-    duration: number;
+    type: RecipeType | undefined;
+    duration: number | undefined;
     recipeName: string;
     steps: RecipeStepsModel[];
     ingredients: RecipeIngredientsModel[];
@@ -50,6 +50,11 @@ export type RecipeNutrientsModel = {
 export type RecipeStepsModel = {
     id: string;
     description: string;
+}
+
+export type LikesModel = {
+    number: number;
+    persons: string[];
 }
 
 export enum RecipeType {

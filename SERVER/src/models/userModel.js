@@ -25,6 +25,12 @@ const userSchema = new Schema({
       required: true,
     },
   ],
+  likedRecipes: [
+    {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+  ],
   registeredOn: {
     type: Date,
     required: true,

@@ -20,6 +20,19 @@ const stepsSubSchema = new Schema({
   },
 });
 
+const likesSubSchema = new Schema({
+  number: {
+    type: Number,
+    required: true,
+  },
+  persons: [
+    {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+  ],
+});
+
 const recipeSchema = new Schema({
   creator: {
     type: mongoose.Types.ObjectId,
@@ -55,7 +68,7 @@ const recipeSchema = new Schema({
     required: true,
   },
   likes: {
-    type: Number,
+    type: likesSubSchema,
     requied: true,
   },
 });

@@ -4,10 +4,17 @@ import { FaChevronLeft, FaEllipsisH } from "react-icons/fa";
 import ActionBar from "./ActionBar";
 
 type NavbarProps = {
-  creatorId: string;
   recipeId: string;
+  creatorId: string;
+  personsWhoLiked: string[];
+  getRecipeDetails: () => void;
 };
-const Navbar: FC<NavbarProps> = ({ creatorId, recipeId }) => {
+const Navbar: FC<NavbarProps> = ({
+  recipeId,
+  creatorId,
+  personsWhoLiked,
+  getRecipeDetails,
+}) => {
   const router = useRouter();
   const ref = useRef<any>(null);
   const [isShown, setIsShown] = useState<boolean>(false);
@@ -42,9 +49,11 @@ const Navbar: FC<NavbarProps> = ({ creatorId, recipeId }) => {
       >
         <FaEllipsisH className="cursor-pointer" />
         <ActionBar
+          isShown={isShown}
           recipeId={recipeId}
           creatorId={creatorId}
-          isShown={isShown}
+          personsWhoLiked={personsWhoLiked}
+          getRecipeDetails={getRecipeDetails}
         />
       </div>
     </div>

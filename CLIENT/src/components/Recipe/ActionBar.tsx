@@ -1,25 +1,33 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import React, { FC, useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import useAxiosRequest from "../../hooks/useAxiosRequest";
 import { NotificationTypes } from "../../models/NotificationModel";
 import { AuthContext } from "../../redux/AuthContext";
 import { NotificationActions } from "../../redux/reducers/notificationReducer";
-import { RootState } from "../../redux/reducers/reducers";
 
 type ActionBarProps = {
+  recipeId: string;
   isShown: boolean;
   creatorId: string;
-  recipeId: string;
+  personsWhoLiked: string[];
+  getRecipeDetails: () => void;
 };
-const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
+const ActionBar: FC<ActionBarProps> = ({
+  isShown,
+  recipeId,
+  creatorId,
+  personsWhoLiked,
+  getRecipeDetails,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { axiosRequest } = useAxiosRequest();
   const { userId } = useContext(AuthContext);
 
   const recipeBelongsToConnectedUser = creatorId && userId === creatorId;
+  const recipeAlreadyLiked = personsWhoLiked.includes(creatorId);
 
   const deleteRecipe = () => {
     axiosRequest(
@@ -51,6 +59,40 @@ const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
     );
   };
 
+  const likeRecipe = () => {
+    const successAction = (res: AxiosResponse) => {
+      getRecipeDetails();
+
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: recipeAlreadyLiked ? "Recipe unliked." : "Recipe liked.",
+          type: NotificationTypes.Success,
+        })
+      );
+    };
+
+    const errorAction = (err: AxiosError) => {
+      console.log(err.message);
+
+      dispatch(
+        NotificationActions.setPopupProperties({
+          content: recipeAlreadyLiked
+            ? "Unliking recipe failed."
+            : "Liking recipe failed.",
+          type: NotificationTypes.Error,
+        })
+      );
+    };
+
+    axiosRequest(
+      "post",
+      `http://localhost:5000/api/recipes/like/${recipeId}`,
+      {},
+      successAction,
+      errorAction
+    );
+  };
+
   if (!isShown) {
     return <></>;
   }
@@ -58,10 +100,8 @@ const ActionBar: FC<ActionBarProps> = ({ isShown, creatorId, recipeId }) => {
   return (
     <div className="absolute top-6 overflow-hidden shadow-md w-44 rounded-lg text-base">
       <ActionBarElement
-        action={() => {
-          console.log("1");
-        }}
-        text="Favorite"
+        action={likeRecipe}
+        text={recipeAlreadyLiked ? "Unlike" : "Like"}
       />
       <ActionBarElement
         action={() => {

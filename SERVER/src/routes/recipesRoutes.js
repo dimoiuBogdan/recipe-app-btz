@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get("/", recipesController.getAllRecipes);
 
+router.get("/top-rated", recipesController.getTopRatedRecipes);
+
 router.get("/:rid/details", recipesController.getRecipeDetails);
 
 router.get("/user/:uid", recipesController.getRecipesByUserId);
@@ -16,6 +18,8 @@ router.get("/user/:uid", recipesController.getRecipesByUserId);
 router.get("/:rid", recipesController.getRecipeById);
 
 router.use(checkAuth); // routes underneath will need authorization
+
+router.post("/like/:rid", recipesController.likeRecipe);
 
 router.post("/", createRecipeValidation, recipesController.createRecipe);
 

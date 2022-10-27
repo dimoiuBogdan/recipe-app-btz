@@ -11,6 +11,12 @@ const getAllRecipes = async (req, res, next) => {
   });
 };
 
+const getTopRatedRecipes = async (req, res, next) => {
+  const recipes = await Recipe.find().sort({ "likes.number": -1 }).limit(5);
+
+  res.json({ recipes });
+};
+
 const getRecipeDetails = async (req, res, next) => {
   const recipeId = req.params.rid;
   let recipeDetails;
@@ -100,6 +106,10 @@ const createRecipe = async (req, res, next) => {
     steps,
     type,
     duration,
+    likes: {
+      number: 0,
+      persons: [],
+    },
   });
 
   let user;
@@ -208,6 +218,73 @@ const deleteRecipe = async (req, res, next) => {
   });
 };
 
+const likeRecipe = async (req, res, next) => {
+  const recipeId = req.params.rid;
+
+  let recipeToLike;
+  try {
+    recipeToLike = await Recipe.findById(recipeId);
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError("Could not find recipe for the provided id", 404)
+    );
+  }
+
+  const personWhoLikedId = req.userData.userId;
+  const personWhoLiked = await User.findById(personWhoLikedId).populate(
+    "likedRecipes"
+  );
+
+  if (!personWhoLiked.likedRecipes.includes(recipeId)) {
+    try {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      recipeToLike.likes.number++;
+      recipeToLike.likes.persons.push(personWhoLikedId);
+
+      personWhoLiked.likedRecipes.push(recipeId);
+      await personWhoLiked.save({ session });
+
+      session.commitTransaction();
+    } catch (error) {
+      console.log(error);
+      return next(new HttpError("Liking recipe failed", 500));
+    }
+  } else {
+    try {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      recipeToLike.likes.number--;
+      recipeToLike.likes.persons = recipeToLike.likes.persons.filter(
+        (pers) => pers.toString() !== personWhoLikedId
+      );
+
+      personWhoLiked.likedRecipes.pull(recipeId);
+      await personWhoLiked.save({ session });
+
+      session.commitTransaction();
+    } catch (error) {
+      console.log(error);
+      return next(new HttpError("Unliking recipe failed", 500));
+    }
+  }
+
+  try {
+    await recipeToLike.save();
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError("Something went wrong. Could not like recipe"),
+      500
+    );
+  }
+
+  res.status(200).json({ recipeToLike });
+};
+
 exports.getRecipeById = getRecipeById;
 exports.getRecipesByUserId = getRecipesByUserId;
 exports.createRecipe = createRecipe;
@@ -215,3 +292,5 @@ exports.getAllRecipes = getAllRecipes;
 exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
 exports.getRecipeDetails = getRecipeDetails;
+exports.likeRecipe = likeRecipe;
+exports.getTopRatedRecipes = getTopRatedRecipes;
