@@ -13,7 +13,7 @@ export type RecipeModel = {
     ingredients: RecipeIngredientsModel[];
 }
 
-export type TopRatedRecipeModel = Pick<RecipeModel, '_id' | 'likes' | 'recipeName' | 'image' | 'creator' | 'duration'>
+export type TopRatedRecipeModel = Pick<RecipeModel, '_id' | 'likes' | 'recipeName' | 'image' | 'creatorUsername' | 'duration'>
 
 export type AllRecipeModel = Pick<RecipeModel, "_id" | "creator" | "image" | "creatorUsername" | "duration" | "recipeName" | "type">
 
@@ -21,8 +21,8 @@ export type RecipeDetailsModel = Pick<RecipeModel, "creator" | "creatorUsername"
 
 export type NewRecipeModel = {
     image: string;
-    type: RecipeType;
-    duration: number;
+    type: RecipeType | undefined;
+    duration: number | undefined;
     recipeName: string;
     steps: RecipeStepsModel[];
     ingredients: RecipeIngredientsModel[];

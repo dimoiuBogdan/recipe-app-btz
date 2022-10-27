@@ -11,6 +11,12 @@ const getAllRecipes = async (req, res, next) => {
   });
 };
 
+const getTopRatedRecipes = async (req, res, next) => {
+  const recipes = await Recipe.find().sort({ "likes.number": -1 }).limit(5);
+
+  res.json({ recipes });
+};
+
 const getRecipeDetails = async (req, res, next) => {
   const recipeId = req.params.rid;
   let recipeDetails;
@@ -287,3 +293,4 @@ exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
 exports.getRecipeDetails = getRecipeDetails;
 exports.likeRecipe = likeRecipe;
+exports.getTopRatedRecipes = getTopRatedRecipes;

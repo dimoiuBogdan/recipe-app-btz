@@ -7,9 +7,9 @@ const TopRatedRecipeCard: FC<TopRatedRecipeModel> = ({
   _id,
   likes,
   image,
-  creator,
   duration,
   recipeName,
+  creatorUsername,
 }) => {
   const redirectToRecipe = () => {
     return;
@@ -32,11 +32,11 @@ const TopRatedRecipeCard: FC<TopRatedRecipeModel> = ({
           </div>
           <div className="pr-3 flex items-center">
             <FaRegThumbsUp className="mr-1" />
-            {likes}
+            {likes.number}
           </div>
           <div className="flex items-center">
             <FaRegUser className="mr-1" />
-            {creator}
+            {creatorUsername}
           </div>
         </div>
       </div>

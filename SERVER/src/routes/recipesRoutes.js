@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get("/", recipesController.getAllRecipes);
 
+router.get("/top-rated", recipesController.getTopRatedRecipes);
+
 router.get("/:rid/details", recipesController.getRecipeDetails);
 
 router.get("/user/:uid", recipesController.getRecipesByUserId);
