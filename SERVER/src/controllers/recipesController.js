@@ -152,39 +152,6 @@ const createRecipe = async (req, res, next) => {
   res.status(201).json({ new_recipe: createdRecipe });
 };
 
-const editRecipe = async (req, res, next) => {
-  const recipeToEditId = req.params.rid;
-  const { title, ingredients } = req.body;
-
-  let recipeToEdit;
-  try {
-    recipeToEdit = await Recipe.findById(recipeToEditId);
-  } catch (error) {
-    return next(new HttpError("Could not find recipe."), 500);
-  }
-
-  if (recipeToDelete.creator._id.toString() !== req.userData.userId) {
-    return next(
-      new HttpError("You are not allowed to delete this recipe", 401)
-    );
-  }
-
-  recipeToEdit.title = title;
-  recipeToEdit.ingredients = ingredients;
-
-  try {
-    await recipeToEdit.save();
-  } catch (error) {
-    console.log(error);
-    return next(
-      new HttpError("Something went wrong. Could not update place"),
-      500
-    );
-  }
-
-  res.status(200).json({ editedRecipe: recipeToEdit });
-};
-
 const deleteRecipe = async (req, res, next) => {
   const recipeToDeleteId = req.params.rid;
 
@@ -299,7 +266,6 @@ exports.getRecipeById = getRecipeById;
 exports.getRecipesByUserId = getRecipesByUserId;
 exports.createRecipe = createRecipe;
 exports.getAllRecipes = getAllRecipes;
-exports.editRecipe = editRecipe;
 exports.deleteRecipe = deleteRecipe;
 exports.getRecipeDetails = getRecipeDetails;
 exports.likeRecipe = likeRecipe;

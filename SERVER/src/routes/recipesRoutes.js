@@ -27,8 +27,6 @@ router.post("/", createRecipeValidation, recipesController.createRecipe);
 
 // always place these routes to the end so that others don't get treated as an id
 
-router.patch("/:rid", recipesController.editRecipe);
-
 router.delete("/:rid", recipesController.deleteRecipe);
 
 module.exports = router;

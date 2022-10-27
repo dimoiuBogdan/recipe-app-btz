@@ -110,15 +110,7 @@ const ActionBar: FC<ActionBarProps> = ({
         text="Share"
       />
       {recipeBelongsToConnectedUser && (
-        <>
-          <ActionBarElement action={deleteRecipe} text="Delete" />
-          <ActionBarElement
-            action={() => {
-              console.log("3");
-            }}
-            text="Edit"
-          />
-        </>
+        <ActionBarElement action={deleteRecipe} text="Delete" />
       )}
     </div>
   );
