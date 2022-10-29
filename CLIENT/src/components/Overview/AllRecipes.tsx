@@ -13,7 +13,14 @@ const AllRecipes: FC<any> = () => {
   const dispatch = useDispatch();
 
   const [perPage, setPerPage] = useState<number>(10);
+  const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [allRecipes, setAllRecipes] = useState<AllRecipeModel[]>([]);
+
+  const filteredSuccessAction = (res: AxiosResponse) => {
+    const { recipes } = res.data as { recipes: AllRecipeModel[] };
+
+    setAllRecipes([...allRecipes, ...recipes]);
+  };
 
   const successAction = (res: AxiosResponse) => {
     const { recipes } = res.data as { recipes: AllRecipeModel[] };
@@ -33,23 +40,39 @@ const AllRecipes: FC<any> = () => {
   };
 
   useEffect(() => {
-    axiosRequest(
-      "get",
-      `http://localhost:5000/api/recipes?perPage=${perPage}`,
-      {},
-      successAction,
-      errorAction
-    );
-  }, [perPage]);
+    if (selectedFilter) {
+      axiosRequest(
+        "post",
+        `http://localhost:5000/api/recipes/filtered-recipes?perPage=${perPage}`,
+        {
+          filter: selectedFilter,
+        },
+        filteredSuccessAction,
+        errorAction
+      );
+    } else {
+      axiosRequest(
+        "get",
+        `http://localhost:5000/api/recipes?perPage=${perPage}`,
+        {},
+        successAction,
+        errorAction
+      );
+    }
+  }, [perPage, selectedFilter]);
 
-  if (allRecipes.length === 0) {
-    return <div>No recipes yet...</div>;
-  }
+  useEffect(() => {
+    setPerPage(10);
+    setAllRecipes([]);
+  }, [selectedFilter]);
 
   return (
     <div className="mt-6">
       <div className="font-medium text-xl">All Recipes🍔</div>
-      <AllRecipesFilters setAllRecipes={setAllRecipes} />
+      <AllRecipesFilters
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
       <AllRecipesCards
         perPage={perPage}
         allRecipes={allRecipes}

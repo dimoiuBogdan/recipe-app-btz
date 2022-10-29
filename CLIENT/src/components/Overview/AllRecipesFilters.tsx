@@ -1,25 +1,14 @@
-import { AxiosError, AxiosResponse } from "axios";
-import React, {
-  FC,
-  useState,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
-import useAxiosRequest from "../../hooks/useAxiosRequest";
-import {
-  AllRecipeModel,
-  RecipeFiltersModel,
-  RecipeType,
-} from "../../models/RecipeModels";
+import React, { FC, Dispatch, SetStateAction } from "react";
+import { RecipeFiltersModel, RecipeType } from "../../models/RecipeModels";
 
 type AllRecipesFiltersProps = {
-  setAllRecipes: Dispatch<SetStateAction<AllRecipeModel[]>>;
+  selectedFilter: string;
+  setSelectedFilter: Dispatch<SetStateAction<string>>;
 };
-const AllRecipesFilters: FC<AllRecipesFiltersProps> = ({ setAllRecipes }) => {
-  const { axiosRequest } = useAxiosRequest();
-  const [selectedFilter, setSelectedFilter] = useState<string>("");
-
+const AllRecipesFilters: FC<AllRecipesFiltersProps> = ({
+  selectedFilter,
+  setSelectedFilter,
+}) => {
   const recipesFilters: RecipeFiltersModel[] = [
     {
       content: "Breakfast🍳",
@@ -54,42 +43,6 @@ const AllRecipesFilters: FC<AllRecipesFiltersProps> = ({ setAllRecipes }) => {
       );
     });
   };
-
-  const filterRecipes = () => {
-    const successAction = (res: AxiosResponse) => {
-      const { recipes } = res.data as { recipes: AllRecipeModel[] };
-
-      setAllRecipes(recipes);
-    };
-
-    const errorAction = (err: AxiosError) => {
-      console.log(err);
-    };
-
-    if (selectedFilter) {
-      axiosRequest(
-        "post",
-        "http://localhost:5000/api/recipes/filtered-recipes",
-        {
-          filter: selectedFilter,
-        },
-        successAction,
-        errorAction
-      );
-    } else {
-      axiosRequest(
-        "get",
-        "http://localhost:5000/api/recipes",
-        {},
-        successAction,
-        errorAction
-      );
-    }
-  };
-
-  useEffect(() => {
-    filterRecipes();
-  }, [selectedFilter]);
 
   return (
     <div className="flex gap-6 mt-3 mb-6">{getRecipeFiltersContent()}</div>

@@ -22,8 +22,11 @@ const getAllRecipes = async (req, res, next) => {
 
 const getFilteredRecipes = async (req, res, next) => {
   const filter = req.body.filter;
+  const { perPage } = req.query;
 
-  const recipes = await Recipe.find({ type: { $eq: filter } });
+  const recipes = await Recipe.find({ type: { $eq: filter } })
+    .skip(perPage - 10)
+    .limit(10);
 
   res.json({
     recipes: recipes,

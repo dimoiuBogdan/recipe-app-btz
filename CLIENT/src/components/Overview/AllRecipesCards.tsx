@@ -55,6 +55,10 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({
     });
   };
 
+  if (allRecipes.length === 0) {
+    return <div>No recipes yet...</div>;
+  }
+
   return <div className="flex flex-wrap">{getAllRecipesContent()}</div>;
 };
 
