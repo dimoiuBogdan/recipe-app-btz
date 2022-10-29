@@ -5,7 +5,16 @@ const User = require("../models/userModel");
 const mongoose = require("mongoose");
 
 const getAllRecipes = async (req, res, next) => {
-  const recipes = await Recipe.find();
+  const { perPage } = req.query;
+
+  if (!perPage) {
+    return;
+  }
+
+  const recipes = await await Recipe.find()
+    .skip(perPage - 10)
+    .limit(10);
+
   res.json({
     recipes,
   });

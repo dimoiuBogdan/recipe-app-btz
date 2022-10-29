@@ -1,27 +1,23 @@
-import { AxiosError, AxiosResponse } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { FC, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { ImSpoonKnife } from "react-icons/im";
-import { useDispatch, useSelector } from "react-redux";
-import useAxiosRequest from "../../hooks/useAxiosRequest";
-import { NotificationTypes } from "../../models/NotificationModel";
+import { Waypoint } from "react-waypoint";
 import { AllRecipeModel } from "../../models/RecipeModels";
-import { NotificationActions } from "../../redux/reducers/notificationReducer";
-import { RootState } from "../../redux/reducers/reducers";
-import Loading from "../Loading/Loading";
 
 type AllRecipesCardsProps = {
+  perPage: number;
   allRecipes: AllRecipeModel[];
+  setPerPage: Dispatch<SetStateAction<number>>;
 };
-const AllRecipesCards: FC<AllRecipesCardsProps> = ({ allRecipes }) => {
-  const loading = useSelector<RootState, boolean>(
-    (s) => s.loadingReducer.loadingState
-  );
-
+const AllRecipesCards: FC<AllRecipesCardsProps> = ({
+  perPage,
+  allRecipes,
+  setPerPage,
+}) => {
   const getAllRecipesContent = () => {
-    return allRecipes?.map((recipe) => {
+    return allRecipes?.map((recipe, index) => {
       const {
         creator,
         duration,
@@ -32,24 +28,32 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({ allRecipes }) => {
         _id,
       } = recipe;
 
+      const isLastElement = index + 1 === perPage;
+
       return (
-        <AllRecipeCard
-          _id={_id}
-          key={_id}
-          type={type}
-          image={image}
-          recipeName={recipeName}
-          creator={creator}
-          creatorUsername={creatorUsername}
-          duration={duration}
-        />
+        <>
+          {isLastElement && (
+            <Waypoint
+              key={`${_id}-waypoint`}
+              onEnter={() => {
+                setPerPage((prev) => prev + 10);
+              }}
+            />
+          )}
+          <AllRecipeCard
+            _id={_id}
+            key={_id}
+            type={type}
+            image={image}
+            recipeName={recipeName}
+            creator={creator}
+            creatorUsername={creatorUsername}
+            duration={duration}
+          />
+        </>
       );
     });
   };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return <div className="flex flex-wrap">{getAllRecipesContent()}</div>;
 };

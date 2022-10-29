@@ -17,6 +17,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
     "react-redux": "^8.0.2",
+    "react-waypoint": "^10.3.0",
     "swiper": "^8.4.2",
     "typesafe-actions": "^5.1.0",
     "uuid": "^9.0.0",
