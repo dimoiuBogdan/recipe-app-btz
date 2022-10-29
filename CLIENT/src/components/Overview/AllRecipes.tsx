@@ -12,14 +12,13 @@ const AllRecipes: FC<any> = () => {
   const { axiosRequest } = useAxiosRequest();
   const dispatch = useDispatch();
 
-  const [limit, setLimit] = useState<number>(10);
-  const [first, setFirst] = useState<number>(0);
+  const [perPage, setPerPage] = useState<number>(10);
   const [allRecipes, setAllRecipes] = useState<AllRecipeModel[]>([]);
 
   const successAction = (res: AxiosResponse) => {
     const { recipes } = res.data as { recipes: AllRecipeModel[] };
 
-    setAllRecipes(recipes);
+    setAllRecipes([...allRecipes, ...recipes]);
   };
 
   const errorAction = (err: AxiosError) => {
@@ -36,18 +35,26 @@ const AllRecipes: FC<any> = () => {
   useEffect(() => {
     axiosRequest(
       "get",
-      `http://localhost:5000/api/recipes?first=${first}&limit=${limit}`,
+      `http://localhost:5000/api/recipes?perPage=${perPage}`,
       {},
       successAction,
       errorAction
     );
-  }, []);
+  }, [perPage]);
+
+  if (allRecipes.length === 0) {
+    return <div>No recipes yet...</div>;
+  }
 
   return (
     <div className="mt-6">
       <div className="font-medium text-xl">All Recipes🍔</div>
       <AllRecipesFilters setAllRecipes={setAllRecipes} />
-      <AllRecipesCards allRecipes={allRecipes} />
+      <AllRecipesCards
+        perPage={perPage}
+        allRecipes={allRecipes}
+        setPerPage={setPerPage}
+      />
     </div>
   );
 };
