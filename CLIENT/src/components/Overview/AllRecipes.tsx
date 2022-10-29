@@ -12,6 +12,8 @@ const AllRecipes: FC<any> = () => {
   const { axiosRequest } = useAxiosRequest();
   const dispatch = useDispatch();
 
+  const [limit, setLimit] = useState<number>(10);
+  const [first, setFirst] = useState<number>(0);
   const [allRecipes, setAllRecipes] = useState<AllRecipeModel[]>([]);
 
   const successAction = (res: AxiosResponse) => {
@@ -34,7 +36,7 @@ const AllRecipes: FC<any> = () => {
   useEffect(() => {
     axiosRequest(
       "get",
-      "http://localhost:5000/api/recipes",
+      `http://localhost:5000/api/recipes?first=${first}&limit=${limit}`,
       {},
       successAction,
       errorAction

@@ -5,7 +5,9 @@ const User = require("../models/userModel");
 const mongoose = require("mongoose");
 
 const getAllRecipes = async (req, res, next) => {
-  const recipes = await Recipe.find();
+  const { first, limit } = req.query;
+
+  const recipes = await Recipe.find(null, null, { skip: first, limit: limit });
   res.json({
     recipes,
   });
