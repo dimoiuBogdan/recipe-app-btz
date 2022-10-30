@@ -94,7 +94,7 @@ const ActionBar: FC<ActionBarProps> = ({
   };
 
   if (!isShown) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -102,12 +102,6 @@ const ActionBar: FC<ActionBarProps> = ({
       <ActionBarElement
         action={likeRecipe}
         text={recipeAlreadyLiked ? "Unlike" : "Like"}
-      />
-      <ActionBarElement
-        action={() => {
-          console.log("1");
-        }}
-        text="Share"
       />
       {recipeBelongsToConnectedUser && (
         <ActionBarElement action={deleteRecipe} text="Delete" />

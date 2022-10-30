@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaEllipsisH } from "react-icons/fa";
+import { AuthContext } from "../../redux/AuthContext";
 import ActionBar from "./ActionBar";
 
 type NavbarProps = {
@@ -18,6 +19,7 @@ const Navbar: FC<NavbarProps> = ({
   const router = useRouter();
   const ref = useRef<any>(null);
   const [isShown, setIsShown] = useState<boolean>(false);
+  const { userId } = useContext(AuthContext);
 
   const handleClickOutside = (event: any) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -42,20 +44,22 @@ const Navbar: FC<NavbarProps> = ({
         className="cursor-pointer"
       />
       <div className="flex-1 text-center">Recipe Details</div>
-      <div
-        onClick={() => setIsShown(!isShown)}
-        ref={ref}
-        className="relative flex justify-end"
-      >
-        <FaEllipsisH className="cursor-pointer" />
-        <ActionBar
-          isShown={isShown}
-          recipeId={recipeId}
-          creatorId={creatorId}
-          personsWhoLiked={personsWhoLiked}
-          getRecipeDetails={getRecipeDetails}
-        />
-      </div>
+      {userId && (
+        <div
+          onClick={() => setIsShown(!isShown)}
+          ref={ref}
+          className="relative flex justify-end"
+        >
+          <FaEllipsisH className="cursor-pointer" />
+          <ActionBar
+            isShown={isShown}
+            recipeId={recipeId}
+            creatorId={creatorId}
+            personsWhoLiked={personsWhoLiked}
+            getRecipeDetails={getRecipeDetails}
+          />
+        </div>
+      )}
     </div>
   );
 };
