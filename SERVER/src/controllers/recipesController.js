@@ -11,12 +11,44 @@ const getAllRecipes = async (req, res, next) => {
     return;
   }
 
-  const recipes = await await Recipe.find()
+  const recipes = await Recipe.find()
     .skip(perPage - 10)
     .limit(10);
 
   res.json({
     recipes,
+  });
+};
+
+const getLikedRecipes = async (req, res, next) => {
+  const userId = req.params.uid;
+  const { perPage } = req.query;
+
+  const currentUser = await User.findById(userId);
+  const likedRecipesIds = currentUser.likedRecipes;
+
+  let result = await Recipe.find({ _id: { $in: likedRecipesIds } })
+    .skip(perPage - 4)
+    .limit(4);
+
+  res.json({
+    recipes: result,
+  });
+};
+
+const getPersonalRecipes = async (req, res, next) => {
+  const userId = req.params.uid;
+  const { perPage } = req.query;
+
+  const currentUser = await User.findById(userId);
+  const personalRecipesIds = currentUser.recipes;
+
+  let result = await Recipe.find({ _id: { $in: personalRecipesIds } })
+    .skip(perPage - 4)
+    .limit(4);
+
+  res.json({
+    recipes: result,
   });
 };
 
@@ -283,3 +315,5 @@ exports.getRecipeDetails = getRecipeDetails;
 exports.likeRecipe = likeRecipe;
 exports.getTopRatedRecipes = getTopRatedRecipes;
 exports.getFilteredRecipes = getFilteredRecipes;
+exports.getLikedRecipes = getLikedRecipes;
+exports.getPersonalRecipes = getPersonalRecipes;

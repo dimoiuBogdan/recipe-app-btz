@@ -1,42 +1,12 @@
 import { Field, ErrorMessage, useFormikContext } from "formik";
 import Image from "next/image";
-import React, { FC, useEffect, useRef, useState } from "react";
-import { NewRecipeModel } from "../../models/RecipeModels";
+import React, { FC } from "react";
+import useUploadImage from "../../hooks/useUploadImage";
 
 const ImageUpload: FC<any> = () => {
-  const [file, setFile] = useState<File | undefined>(undefined);
-  const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
-    null
-  );
-  const filePickerRef = useRef<HTMLInputElement | null>(null);
-  const { setFieldValue } = useFormikContext<NewRecipeModel>();
-
-  const handlePickedImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-
-    if (files && files.length === 1) {
-      const pickedFile = files[0];
-      setFile(pickedFile);
-      setFieldValue("image", pickedFile);
-      return;
-    }
-  };
-
-  const pickImage = () => {
-    filePickerRef?.current?.click();
-  };
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
-
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewUrl(fileReader.result);
-    };
-    fileReader.readAsDataURL(file);
-  }, [file]);
+  const { setFieldValue } = useFormikContext();
+  const { filePickerRef, getPickedImage, pickImage, previewUrl } =
+    useUploadImage();
 
   return (
     <div className="fieldWrapperClassName w-1/3">
@@ -52,7 +22,10 @@ const ImageUpload: FC<any> = () => {
                 className="hidden"
                 type={"file"}
                 accept=".jpg,.png,.jpeg"
-                onChange={(e) => handlePickedImage(e)}
+                onChange={(e) => {
+                  const image = getPickedImage(e);
+                  setFieldValue("image", image);
+                }}
               />
               <div
                 onClick={pickImage}
