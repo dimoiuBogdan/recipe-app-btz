@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { FC } from "react";
 import { FaRegClock, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
 import { TopRatedRecipeModel } from "../../models/RecipeModels";
@@ -11,8 +12,12 @@ const TopRatedRecipeCard: FC<TopRatedRecipeModel> = ({
   recipeName,
   creatorUsername,
 }) => {
+  const router = useRouter();
+
   const redirectToRecipe = () => {
-    return;
+    router.push({
+      pathname: `/recipes/${_id}`,
+    });
   };
 
   return (
@@ -21,7 +26,7 @@ const TopRatedRecipeCard: FC<TopRatedRecipeModel> = ({
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5)), url(${image})`,
       }}
       onClick={redirectToRecipe}
-      className="w-full bg-cover bg-center relative rounded-md shadow-md h-80 overflow-hidden text-white p-2 flex flex-col justify-end"
+      className="w-full cursor-pointer bg-cover bg-center relative rounded-md shadow-md h-80 overflow-hidden text-white p-2 flex flex-col justify-end"
     >
       <div className="z-10">
         <div className="font-medium text-lg">{recipeName}</div>
