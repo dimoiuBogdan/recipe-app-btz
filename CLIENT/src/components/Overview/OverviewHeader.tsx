@@ -28,7 +28,7 @@ const OverviewHeader: FC<any> = () => {
     const errorAction = (err: AxiosError) => {
       dispatch(
         NotificationActions.setPopupProperties({
-          content: "Something went wrong retrevieng your details.",
+          content: "Something went wrong retrieving your details.",
           type: NotificationTypes.Error,
         })
       );

@@ -7,7 +7,8 @@ import { Waypoint } from "react-waypoint";
 import { AllRecipeModel } from "../../models/RecipeModels";
 
 type AllRecipesCardsProps = {
-  perPage: number;
+  perPage?: number;
+  loadMoreButton?: boolean;
   allRecipes: AllRecipeModel[];
   setPerPage: Dispatch<SetStateAction<number>>;
 };
@@ -15,6 +16,7 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({
   perPage,
   allRecipes,
   setPerPage,
+  loadMoreButton,
 }) => {
   const getAllRecipesContent = () => {
     return allRecipes?.map((recipe, index) => {
@@ -32,7 +34,7 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({
 
       return (
         <>
-          {isLastElement && (
+          {isLastElement && !loadMoreButton && (
             <Waypoint
               key={`${_id}-waypoint`}
               onEnter={() => {
@@ -45,10 +47,10 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({
             key={_id}
             type={type}
             image={image}
-            recipeName={recipeName}
             creator={creator}
-            creatorUsername={creatorUsername}
             duration={duration}
+            recipeName={recipeName}
+            creatorUsername={creatorUsername}
           />
         </>
       );
@@ -59,12 +61,26 @@ const AllRecipesCards: FC<AllRecipesCardsProps> = ({
     return <div>No recipes yet...</div>;
   }
 
-  return <div className="flex flex-wrap">{getAllRecipesContent()}</div>;
+  return (
+    <div>
+      <div className="flex flex-wrap">{getAllRecipesContent()}</div>
+      {loadMoreButton && (
+        <div
+          onClick={() => {
+            setPerPage((prev) => prev + 4);
+          }}
+          className="font-medium cursor-pointer text-center my-2"
+        >
+          Load More...
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default AllRecipesCards;
 
-const AllRecipeCard: FC<AllRecipeModel> = ({
+export const AllRecipeCard: FC<AllRecipeModel> = ({
   _id,
   type,
   image,
