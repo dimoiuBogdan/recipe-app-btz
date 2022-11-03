@@ -37,14 +37,13 @@ const NewRecipePage: NextPage = () => {
   ) => {
     const { image, recipeName, duration, ingredients, type, steps } = values;
 
-    const data = {
-      image,
-      ingredients,
-      steps,
-      recipeName,
-      duration: `${duration} min`,
-      type,
-    };
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("ingredients", JSON.stringify(ingredients));
+    formData.append("steps", JSON.stringify(steps));
+    formData.append("recipeName", recipeName);
+    formData.append("type", JSON.stringify(type));
+    formData.append("duration", `${duration} min`);
 
     const successAction = (res: AxiosResponse) => {
       dispatch(
@@ -73,10 +72,11 @@ const NewRecipePage: NextPage = () => {
     axiosRequest(
       "post",
       "http://localhost:5000/api/recipes",
-      data,
+      formData,
       successAction,
       errorAction,
-      finallyAction
+      finallyAction,
+      true
     );
   };
 

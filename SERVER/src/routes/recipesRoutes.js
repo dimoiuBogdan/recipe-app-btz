@@ -5,6 +5,9 @@ const {
 } = require("../validations/recipesRoutesValidation");
 const checkAuth = require("../middlewares/checkAuth");
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/images" });
+
 const router = express.Router();
 
 router.get("/", recipesController.getAllRecipes);
@@ -27,7 +30,14 @@ router.get("/favorites/:uid", recipesController.getLikedRecipes);
 
 router.post("/like/:rid", recipesController.likeRecipe);
 
-router.post("/", createRecipeValidation, recipesController.createRecipe);
+router.post(
+  "/",
+  upload.single("image"),
+  createRecipeValidation,
+  recipesController.createRecipe
+);
+
+router.get("/images/:key", recipesController.getS3Image);
 
 // always place these routes to the end so that others don't get treated as an id
 

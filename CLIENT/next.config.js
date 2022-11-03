@@ -3,7 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["external-content.duckduckgo.com"],
+    domains: [
+      "external-content.duckduckgo.com",
+      "dimoiubogdanbucket.s3.eu-central-1.amazonaws.com",
+    ],
   },
 };
 

@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const Recipe = require("../models/recipeModel");
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
+const { uploadToS3, getFileFromS3 } = require("./s3");
 
 const getAllRecipes = async (req, res, next) => {
   const { perPage } = req.query;
@@ -138,10 +139,28 @@ const getRecipeById = async (req, res, next) => {
   });
 };
 
+const getS3Image = async (req, res, next) => {
+  const key = req.params.key;
+  const readStream = getFileFromS3(key);
+
+  readStream.pipe(res);
+};
+
 const createRecipe = async (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
+    console.log(errors);
     return next(new HttpError("Invalid inputs passed"), 422);
+  }
+
+  let result;
+  try {
+    const file = req.file;
+    result = await uploadToS3(file);
+  } catch (error) {
+    console.log(error);
+    return next(new HttpError("Could not upload file to S3"), 500);
   }
 
   const { recipeName, ingredients, type, duration, steps } = req.body;
@@ -154,10 +173,9 @@ const createRecipe = async (req, res, next) => {
     recipeName,
     creator: creatorId,
     creatorUsername: creatorDetails.username,
-    image:
-      "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bestviolet.com%2Ffast-food-logo.jpg&f=1&nofb=1&ipt=d7638e42568715f8834e529944691ecaffa6bb9c31fffc305488e61455a4d015&ipo=images",
-    ingredients,
-    steps,
+    image: result.Location, // how? dis not working. not downloading image from S3
+    ingredients: JSON.parse(ingredients),
+    steps: JSON.parse(steps),
     type,
     duration,
     likes: {
@@ -316,4 +334,5 @@ exports.likeRecipe = likeRecipe;
 exports.getTopRatedRecipes = getTopRatedRecipes;
 exports.getFilteredRecipes = getFilteredRecipes;
 exports.getLikedRecipes = getLikedRecipes;
+exports.getS3Image = getS3Image;
 exports.getPersonalRecipes = getPersonalRecipes;

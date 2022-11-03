@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ingredientsSubSchema = new Schema({
-  title: {
+  quantity: {
     type: String,
     required: true,
   },
-  quantity: {
+  title: {
     type: String,
     required: true,
   },

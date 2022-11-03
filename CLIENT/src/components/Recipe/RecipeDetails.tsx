@@ -17,6 +17,8 @@ const RecipeDetails: FC<
         alt={recipeName}
         width={300}
         height={250}
+        objectFit="cover"
+        objectPosition="center"
       />
       <div className="text-lg font-medium mt-1">
         {recipeName}

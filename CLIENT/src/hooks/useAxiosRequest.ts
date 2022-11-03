@@ -30,8 +30,19 @@ const useAxiosRequest = () => {
         url: string, data: any,
         successAction: (res: AxiosResponse<any, any>) => void,
         errorAction: (err: AxiosError) => void,
-        finallyAction?: () => void
+        finallyAction?: () => void,
+        isFileRequest?: boolean
     ) => {
+        const headers = isFileRequest ? {
+            "Content-Type": "multipart/form-data",
+            "Authorization": "Bearer " + token
+        } : {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        }
+
+        const getData = !isFileRequest ? JSON.stringify(data) : data;
+
         dispatch(LoadingActions.setLoading(true))
 
         const httpAbortController = new AbortController();
@@ -39,12 +50,9 @@ const useAxiosRequest = () => {
 
         axios({
             method,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
+            headers,
             url,
-            data: JSON.stringify(data),
+            data: getData
         })
             .then((res) => {
                 clearHttpRequestControllerAfterCompletion(httpAbortController)

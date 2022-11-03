@@ -103,11 +103,13 @@ export const AllRecipeCard: FC<AllRecipeModel> = ({
       <div className="bg-orange-200 bg-opacity-70 shadow-sm rounded-md p-3 cursor-pointer hover:shadow-lg text-zinc-500">
         <div className="flex">
           <Image
-            className="rounded-lg object-cover object-center shadow-sm"
+            className="rounded-lg shadow-sm"
             width="120"
             height="100"
             alt={recipeName}
             src={image}
+            objectFit="cover"
+            objectPosition="center"
           />
           <div className="ml-2 flex flex-col justify-between flex-1">
             <div className="flex items-center justify-between w-full">
